@@ -13,9 +13,28 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    // Handle registration logic here
+    try {
+      const response = await fetch('http://localhost:8000/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+          confirmPassword,  // optional if used in backend
+        }),
+      });
+  
+      const data = await response.json();
+      console.log(data);
+  
+      // Optional: redirect or show success message
+    } catch (error) {
+      console.error('Registration failed:', error);
+    }
     console.log({ email, password, confirmPassword });
   };
 
