@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -6,15 +7,38 @@ import {
   Input,
   VStack,
   Field,
+  Text,
 } from '@chakra-ui/react';
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    if (!email.trim()) {
+      setError("Email is required");
+      return;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Invalid email format");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    } else if (password.length <= 4) {
+      setError("Password must be at least 5 characters");
+      return;
+    } else {
+      setError('');
+    }
+
     try {
       const response = await fetch('http://localhost:8000/register', {
         method: 'POST',
@@ -29,9 +53,12 @@ const RegisterPage = () => {
       });
   
       const data = await response.json();
-      console.log(data);
-  
-      // Optional: redirect or show success message
+      if (!response.ok) {
+        console.error("Registration failed:", data.detail || data.message);
+      } else {
+        console.log("Registration success:", data);
+        navigate('/dashboard');
+      }
     } catch (error) {
       console.error('Registration failed:', error);
     }
@@ -71,9 +98,20 @@ const RegisterPage = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </Field.Root>
+            {error && (
+              <Text color="red.500" fontSize="sm" mt={-2} mb={2}>
+                {error}
+              </Text>
+            )}
             <Button colorScheme="blue" type="submit" width="full">
               Register
             </Button>
+            <Text fontSize="sm" color="gray.600">
+              Already have an account?{' '}
+              <Link to="/" style={{ color: '#3182ce' }}>
+                Log in
+              </Link>
+            </Text>
           </VStack>
         </form>
       </Box>

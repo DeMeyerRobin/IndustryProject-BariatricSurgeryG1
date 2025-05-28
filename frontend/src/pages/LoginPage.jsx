@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -6,16 +7,39 @@ import {
   Input,
   VStack,
   Field,
+  Text,
 } from '@chakra-ui/react';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log({ email, password });
+
+    try {
+      const response = await fetch('http://localhost:8000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || data.status !== "success") {
+        setError(data.detail || data.message || "Invalid email or password");
+      } else {
+        setError('');
+        console.log("Login success:", data);
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+    }
   };
 
   return (
@@ -42,9 +66,20 @@ const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Field.Root>
+            {error && (
+              <Text color="red.500" fontSize="sm" mt={-2} mb={2}>
+                {error}
+              </Text>
+            )}
             <Button colorScheme="blue" type="submit" width="full">
               Login
             </Button>
+            <Text fontSize="sm" color="gray.600">
+              Don&apos;t have an account?{' '}
+              <Link to="/register" style={{ color: '#3182ce' }}>
+                Register
+              </Link>
+            </Text>
           </VStack>
         </form>
       </Box>

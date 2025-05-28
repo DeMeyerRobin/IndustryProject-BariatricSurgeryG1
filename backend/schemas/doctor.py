@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
-class UserAuth(BaseModel):
+class DoctorAuth(BaseModel):
     email: str
     password: str
