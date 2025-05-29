@@ -1,0 +1,77 @@
+// src/pages/PatientDetail.jsx
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Box, Heading, Text, Spinner, Button } from '@chakra-ui/react';
+
+const PatientDetail = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(true);
+  const [patient, setPatient] = useState(null);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    fetch('http://localhost:8000/check-session', {
+      credentials: 'include'
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.logged_in) {
+          navigate('/');
+        } else {
+          fetch(`http://localhost:8000/patient/${id}`, {
+            credentials: 'include'
+          })
+            .then(res => {
+              if (!res.ok) throw new Error('Patient not found or access denied');
+              return res.json();
+            })
+            .then(data => {
+              setPatient(data);
+              setLoading(false);
+            })
+            .catch(err => {
+              setError(err.message);
+              setLoading(false);
+            });
+        }
+      })
+      .catch(() => navigate('/'));
+  }, [id, navigate]);
+
+  if (loading) {
+    return <Box p={8}><Spinner /> Loading patient details...</Box>;
+  }
+
+  if (error) {
+    return <Box p={8}><Text color="red.500">{error}</Text></Box>;
+  }
+
+  return (
+    <Box bg="gray.100" minH="100vh" p={8}>
+      <Box bg="white" p={6} rounded="md" shadow="md" maxW="xl" mx="auto">
+        <Heading mb={6}>Patient Details</Heading>
+
+        <Box mb={3}><Text><strong>Name:</strong> {patient.name}</Text></Box>
+        <Box mb={3}><Text><strong>Age:</strong> {patient.age}</Text></Box>
+        <Box mb={3}><Text><strong>Gender:</strong> {patient.gender}</Text></Box>
+        <Box mb={3}><Text><strong>Height:</strong> {patient.height} cm</Text></Box>
+        <Box mb={3}><Text><strong>Weight:</strong> {patient.weight} kg</Text></Box>
+        <Box mb={3}><Text><strong>Family Surgery Count:</strong> {patient.family_surgery_count}</Text></Box>
+        <Box mb={3}><Text><strong>Chronic Meds Count:</strong> {patient.chronic_meds_count}</Text></Box>
+        <Box mb={3}><Text><strong>Procedure Category:</strong> {patient.procedure_category}</Text></Box>
+        <Box mb={3}><Text><strong>Antibiotics:</strong> {patient.antibiotics}</Text></Box>
+        <Box mb={3}><Text><strong>Cholecystectomy Repair:</strong> {patient.cholecystectomy_repair === 1 ? 'Yes' : 'No'}</Text></Box>
+        <Box mb={3}><Text><strong>Hiatus Hernia Repair:</strong> {patient.hiatus_hernia_repair === 1 ? 'Yes' : 'No'}</Text></Box>
+        <Box mb={6}><Text><strong>Drain Used:</strong> {patient.drain === 1 ? 'Yes' : 'No'}</Text></Box>
+
+        <Button onClick={() => navigate('/dashboard')} colorScheme="blue">
+          Back to Dashboard
+        </Button>
+      </Box>
+    </Box>
+  );
+};
+
+export default PatientDetail;
