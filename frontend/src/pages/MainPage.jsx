@@ -12,11 +12,14 @@ import {
   Flex,
 } from '@chakra-ui/react';
 
+import { useNavigate } from 'react-router-dom';
+
 const MainPage = () => {
   const mockPatients = [
     { id: 1, name: 'John Doe', age: 45 },
     { id: 2, name: 'Jane Smith', age: 38 },
   ];
+  const navigate = useNavigate();
 
   return (
     <Box bg="gray.100" minH="100vh" p={8}>
@@ -36,7 +39,9 @@ const MainPage = () => {
       <Box bg="white" p={6} rounded="md" shadow="md">
         <Flex justify="space-between" align="center" mb={4}>
           <Heading size="md">Patient List</Heading>
-          <Button colorScheme="blue">Add New Patient</Button>
+          <Button colorScheme="blue" onClick={() => navigate('/AddPatient')}>
+            Add New Patient
+          </Button>
         </Flex>
 
         <VStack Separator={<Separator borderColor="gray.200" />} spacing={4} align="stretch">
