@@ -1,8 +1,11 @@
+from starlette.middleware.sessions import SessionMiddleware
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import auth, predict
+from routes import doctors, predict, patients
 
 app = FastAPI()
+
+app.add_middleware(SessionMiddleware, secret_key="BIASSuperSecretKey")  # store in .env later
 
 app.add_middleware(
     CORSMiddleware,
@@ -12,8 +15,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router)
+app.include_router(doctors.router)
 app.include_router(predict.router)
+app.include_router(patients.router)
 
 @app.get("/")
 def root():

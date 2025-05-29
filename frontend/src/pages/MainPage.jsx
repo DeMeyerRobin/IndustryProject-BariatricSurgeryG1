@@ -13,13 +13,52 @@ import {
 } from '@chakra-ui/react';
 
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
+
 
 const MainPage = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/check-session", {
+      credentials: "include"
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.logged_in) {
+          navigate('/');
+        } else {
+          setLoading(false);
+        }
+      })
+      .catch(() => navigate('/'));
+  }, [navigate]);
+
+  if (loading) {
+    return <Box p={8}><Text>Loading...</Text></Box>;
+  }
+
   const mockPatients = [
     { id: 1, name: 'John Doe', age: 45 },
     { id: 2, name: 'Jane Smith', age: 38 },
   ];
-  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    fetch("http://localhost:8000/logout", {
+      method: "POST",
+      credentials: "include"
+    })
+      .then((res) => res.json())
+      .then(() => {
+        navigate('/');
+      })
+      .catch((err) => {
+        console.error("Logout failed", err);
+        navigate('/');
+      });
+  };
 
   return (
     <Box bg="gray.100" minH="100vh" p={8}>
@@ -29,7 +68,9 @@ const MainPage = () => {
         </Box>
         <Flex justify="space-between" align="center" mb={4}>
           <Heading size="lg">Doctor Dashboard</Heading>
-          <Button colorScheme="red" variant="outline">Logout</Button>
+          <Button colorScheme="red" variant="outline" onClick={handleLogout}>
+            Logout
+          </Button>
         </Flex>
         <Text color="gray.600">
           Welcome back. Manage your patients and get surgical success predictions below.

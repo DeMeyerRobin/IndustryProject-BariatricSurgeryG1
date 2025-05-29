@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import {
   Box,
   Button,
@@ -17,6 +18,21 @@ const RegisterPage = () => {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("http://localhost:8000/check-session", {
+      credentials: "include"
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.logged_in) {
+          navigate('/dashboard');
+        }
+      })
+      .catch((err) => {
+        console.error("Session check failed", err);
+      });
+  }, [navigate]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
