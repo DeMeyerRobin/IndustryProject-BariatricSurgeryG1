@@ -77,7 +77,7 @@ const AddPatient = () => {
         .then(data => {
           if (data.status === "success") {
             console.log("Patient saved with ID:", data.patient_id);
-            navigate("/dashboard");
+            navigate(`/patient/${data.patient_id}`);
           } else {
             console.error("Failed to save patient:", data);
             alert("Something went wrong when saving the patient.");
