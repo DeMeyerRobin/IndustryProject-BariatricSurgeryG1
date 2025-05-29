@@ -25,7 +25,7 @@
             <mxPoint x="530" y="450" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ppyI8dV4X2BFpjyLbfqM-8" value="MYSQL" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="ppyI8dV4X2BFpjyLbfqM-8" value="Backend" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="170" y="-110" width="1100" height="220" as="geometry" />
         </mxCell>
         <mxCell id="ppyI8dV4X2BFpjyLbfqM-9" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="ppyI8dV4X2BFpjyLbfqM-3" target="ppyI8dV4X2BFpjyLbfqM-8">
@@ -61,13 +61,37 @@
         <mxCell id="ppyI8dV4X2BFpjyLbfqM-15" value="Email,&lt;div&gt;Password&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
           <mxGeometry x="210" y="180" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="ppyI8dV4X2BFpjyLbfqM-16" value="Dashboard" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="ppyI8dV4X2BFpjyLbfqM-16" value="AddPatient" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="750" y="310" width="130" height="80" as="geometry" />
         </mxCell>
         <mxCell id="ppyI8dV4X2BFpjyLbfqM-17" value="" style="endArrow=classic;html=1;rounded=0;exitX=1.006;exitY=0.17;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;exitPerimeter=0;" edge="1" parent="1" source="ppyI8dV4X2BFpjyLbfqM-4" target="ppyI8dV4X2BFpjyLbfqM-16">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="310" y="360" as="sourcePoint" />
             <mxPoint x="530" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ppyI8dV4X2BFpjyLbfqM-18" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.569;entryY=0.994;entryDx=0;entryDy=0;dashed=1;entryPerimeter=0;" edge="1" parent="1" source="ppyI8dV4X2BFpjyLbfqM-16" target="ppyI8dV4X2BFpjyLbfqM-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="245" y="490" as="sourcePoint" />
+            <mxPoint x="455" y="120" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ppyI8dV4X2BFpjyLbfqM-19" value="Core_X data&lt;div&gt;Patient info&amp;nbsp;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="795" y="153" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ppyI8dV4X2BFpjyLbfqM-20" value="MySQL" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="170" y="-480" width="1100" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="ppyI8dV4X2BFpjyLbfqM-21" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.408;exitY=-0.004;exitDx=0;exitDy=0;entryX=0.41;entryY=0.996;entryDx=0;entryDy=0;dashed=1;exitPerimeter=0;entryPerimeter=0;" edge="1" parent="1" source="ppyI8dV4X2BFpjyLbfqM-8" target="ppyI8dV4X2BFpjyLbfqM-20">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="420" y="110" as="sourcePoint" />
+            <mxPoint x="630" y="-260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ppyI8dV4X2BFpjyLbfqM-22" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.537;exitY=0.996;exitDx=0;exitDy=0;dashed=1;exitPerimeter=0;" edge="1" parent="1" source="ppyI8dV4X2BFpjyLbfqM-20">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="770" y="-110" as="sourcePoint" />
+            <mxPoint x="760" y="-112" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>

@@ -2,10 +2,13 @@ from starlette.middleware.sessions import SessionMiddleware
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes import doctors, predict, patients
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 app = FastAPI()
 
-app.add_middleware(SessionMiddleware, secret_key="BIASSuperSecretKey")  # store in .env later
+app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY"))
 
 app.add_middleware(
     CORSMiddleware,

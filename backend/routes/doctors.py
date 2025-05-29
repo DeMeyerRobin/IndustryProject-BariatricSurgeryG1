@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 from schemas.doctor import DoctorAuth
 from db.database import SessionLocal
-from db.models import Doctor
+from db.models import Doctor, Patient
 import bcrypt
 
 router = APIRouter()
@@ -52,3 +52,17 @@ def check_session(request: Request):
     if doctor_id is None:
         return {"logged_in": False}
     return {"logged_in": True, "doctor_id": doctor_id}
+
+@router.get("/my-patients")
+def get_my_patients(request: Request, db: Session = Depends(get_db)):
+    doctor_id = request.session.get("doctor_id")
+    if doctor_id is None:
+        raise HTTPException(status_code=401, detail="Not logged in")
+
+    patients = db.query(Patient).filter(Patient.fk_idDoctorInfo == doctor_id).all()
+    
+    return {
+        "status": "success",
+        "count": len(patients),
+        "patients": [p.__dict__ for p in patients]
+    }

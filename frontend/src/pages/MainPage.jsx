@@ -16,10 +16,27 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 
-
 const MainPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [patients, setPatients] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:8000/my-patients', {
+      credentials: 'include'
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          setPatients(data.patients);
+          console.log("Fetched patients:", data.patients);
+        }
+      })
+      .catch(err => {
+        console.error("Failed to fetch patients:", err);
+      });
+  }, []);
+  
 
   useEffect(() => {
     fetch("http://localhost:8000/check-session", {
@@ -85,18 +102,41 @@ const MainPage = () => {
           </Button>
         </Flex>
 
-        <VStack Separator={<Separator borderColor="gray.200" />} spacing={4} align="stretch">
-          {mockPatients.map((patient) => (
-            <HStack key={patient.id} spacing={4} p={4} bg="gray.50" rounded="md">
-              <Box>
-                <Text fontWeight="bold">{patient.name}</Text>
-                <Text fontSize="sm" color="gray.600">Age: {patient.age}</Text>
-              </Box>
-              <Spacer />
-              <Button size="sm" colorScheme="teal">View</Button>
-            </HStack>
-          ))}
-        </VStack>
+        <div>
+          {patients.length === 0 ? (
+            <p>No patients yet.</p>
+          ) : (
+            patients.map((patient) => (
+              <div key={patient.idPatientInfo} style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '16px',
+                margin: '8px 0',
+                background: '#f9f9f9',
+                borderRadius: '8px'
+              }}>
+                <div>
+                  <strong>{patient.name}</strong><br />
+                  Age: {patient.age}
+                </div>
+                <button
+                  onClick={() => navigate(`/patient/${patient.idPatientInfo}`)} // if you have a route like that
+                  style={{
+                    background: '#3182CE',
+                    color: 'white',
+                    border: 'none',
+                    padding: '8px 12px',
+                    borderRadius: '4px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  View
+                </button>
+              </div>
+            ))
+          )}
+        </div>
       </Box>
     </Box>
   );
