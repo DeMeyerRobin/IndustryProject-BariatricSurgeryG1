@@ -1,7 +1,7 @@
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import doctors, predict, patients
+from routes import doctors, patients
 from dotenv import load_dotenv
 import os
 
@@ -19,7 +19,6 @@ app.add_middleware(
 )
 
 app.include_router(doctors.router)
-app.include_router(predict.router)
 app.include_router(patients.router)
 
 @app.get("/")

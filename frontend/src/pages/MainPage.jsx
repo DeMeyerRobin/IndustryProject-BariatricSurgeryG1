@@ -11,7 +11,7 @@ import {
   Spacer,
   Flex,
 } from '@chakra-ui/react';
-import { FaMars, FaVenus } from 'react-icons/fa';
+import { FaMars, FaVenus, FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -21,6 +21,7 @@ const MainPage = () => {
   const [loading, setLoading] = useState(true);
   const [patients, setPatients] = useState([]);
   const [sortBy, setSortBy] = useState("name_asc");
+  const [doctorId, setDoctorId] = useState(null);
 
   const sortedPatients = [...patients].sort((a, b) => {
     if (sortBy === "name_asc") return a.name.localeCompare(b.name);
@@ -56,6 +57,7 @@ const MainPage = () => {
         if (!data.logged_in) {
           navigate('/');
         } else {
+          setDoctorId(data.doctor_id);  // store doctor ID
           setLoading(false);
         }
       })
@@ -94,9 +96,17 @@ const MainPage = () => {
         </Box>
         <Flex justify="space-between" align="center" mb={4}>
           <Heading size="lg">Doctor Dashboard</Heading>
-          <Button colorScheme="red" variant="outline" onClick={handleLogout}>
-            Logout
-          </Button>
+          <HStack spacing={4}>
+            <Button
+              variant="outline"
+              onClick={() => navigate(`/profile/${doctorId}`)}
+            >
+              Profile
+            </Button>
+            {/* <Button colorScheme="red" variant="outline" onClick={handleLogout}>
+              Logout
+            </Button> */}
+          </HStack>
         </Flex>
         <Text color="gray.600">
           Welcome back Dr. | today is {new Date().toLocaleDateString()}
@@ -117,8 +127,8 @@ const MainPage = () => {
               marginRight: '12px'
             }}
           >
-            <option value="name_asc">Sort by Name (A–Z)</option>
-            <option value="name_desc">Sort by Name (Z–A)</option>
+            <option value="name_asc">Sort by Name (A-Z)</option>
+            <option value="name_desc">Sort by Name (Z-A)</option>
             <option value="age_asc">Sort by Age (Youngest)</option>
             <option value="age_desc">Sort by Age (Oldest)</option>
           </select>

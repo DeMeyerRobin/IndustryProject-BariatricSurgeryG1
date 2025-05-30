@@ -243,9 +243,21 @@ const AddPatient = () => {
           </select>
         </div>
 
-        <button style={buttonStyle} onClick={handleSubmit}>
-          Submit
-        </button>
+        <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+          <button style={buttonStyle} onClick={handleSubmit}>
+            Submit
+          </button>
+          <button
+            style={{
+              ...buttonStyle,
+              backgroundColor: '#E2E8F0',
+              color: '#1A202C'
+            }}
+            onClick={() => navigate('/dashboard')}
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );

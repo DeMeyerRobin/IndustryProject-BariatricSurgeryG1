@@ -68,20 +68,49 @@ const PatientDetail = () => {
         <Box mb={10}><Text><strong>Drain Used:</strong> {patient.drain}</Text></Box>
         <Box mb={6}><Text><strong>Risk Prediction:</strong> {patient.risk_pred} %</Text></Box>
 
-        <Button onClick={() => navigate('/dashboard')} colorScheme="blue">
-          Back to Dashboard
-        </Button>
-        <Button
-          ml={3}
-          onClick={() => navigate(`/patient/${id}/edit`)}
-          variant="outline"
-          borderColor="black"
-          color="black"
-          bg="transparent"
-          _hover={{ bg: "blackAlpha.100" }}
-        >
-          Edit File
-        </Button>
+        <Box display="flex" gap={3} mt={6}>
+          <Button onClick={() => navigate('/dashboard')} colorScheme="blue">
+            Back to Dashboard
+          </Button>
+          <Button
+            onClick={() => navigate(`/patient/${id}/edit`)}
+            variant="outline"
+            borderColor="gray.300"
+            color="black"
+            _hover={{ bg: "gray.100" }}
+          >
+            Edit File
+          </Button>
+          <Button
+            bg="red.500"
+            color="white"
+            _hover={{ bg: "red.600" }}
+            _active={{ bg: "red.700" }}
+            onClick={() => {
+              if (window.confirm("Are you sure you want to delete this patient?")) {
+                fetch(`http://localhost:8000/patient/${id}/delete`, {
+                  method: 'DELETE',
+                  credentials: 'include',
+                })
+                  .then(res => res.json())
+                  .then(data => {
+                    if (data.status === 'success') {
+                      alert("Patient deleted successfully.");
+                      navigate('/dashboard');
+                    } else {
+                      alert("Failed to delete patient.");
+                    }
+                  })
+                  .catch(err => {
+                    console.error("Delete failed", err);
+                    alert("An error occurred while deleting the patient.");
+                  });
+              }
+            }}
+          >
+            Delete Patient
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

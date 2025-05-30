@@ -1,4 +1,4 @@
-import copy
+from copy import copy
 from fastapi import APIRouter, Request, HTTPException, Depends, Body
 from sqlalchemy.orm import Session
 from db.database import SessionLocal
@@ -154,4 +154,29 @@ def update_patient(patient_id: int, data: PatientCreate, request: Request, db: S
         patient.risk_pred = 0.0
 
     db.commit()
+    return {"status": "success"}
+
+
+@router.delete("/patient/{patient_id}/delete")
+def delete_patient(
+    patient_id: int,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    doctor_id = request.session.get("doctor_id")
+
+    if not doctor_id:
+        raise HTTPException(status_code=401, detail="Not logged in")
+
+    patient = db.query(Patient).filter(
+        Patient.idPatientInfo == patient_id,
+        Patient.fk_idDoctorInfo == doctor_id
+    ).first()
+
+    if not patient:
+        raise HTTPException(status_code=404, detail="Patient not found or access denied")
+
+    db.delete(patient)
+    db.commit()
+
     return {"status": "success"}
