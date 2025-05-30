@@ -9,7 +9,7 @@ const AddPatient = () => {
   const [gender, setGender] = useState('');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
-  const [familySurgeryCount, setFamilySurgeryCount] = useState('');
+  const [familySurgeryCnt, setFamilySurgeryCount] = useState('');
   const [chronicMedsCnt, setChronicMedsCnt] = useState('');
   const [procedureCategory, setProcedureCategory] = useState('');
   const [antibiotics, setAntibiotics] = useState('');
@@ -56,7 +56,7 @@ const AddPatient = () => {
         gender,
         height: parseOrZero(height),
         weight: parseOrZero(weight),
-        family_surgery_count: parseOrZero(familySurgeryCount),
+        family_surgery_cnt: parseOrZero(familySurgeryCnt),
         chronic_meds_cnt: parseOrZero(chronicMedsCnt),
         procedure_category: procedureCategory,
         antibiotics,
@@ -166,7 +166,7 @@ const AddPatient = () => {
           { label: "How old is the patient?", value: age, setter: setAge, type: "number" },
           { label: "Patient's height (cm)?", value: height, setter: setHeight, type: "number" },
           { label: "Patient's weight (kg)?", value: weight, setter: setWeight, type: "number" },
-          { label: "Previous number of family surgeries?", value: familySurgeryCount, setter: setFamilySurgeryCount, type: "number" },
+          { label: "Previous number of family surgeries?", value: familySurgeryCnt, setter: setFamilySurgeryCount, type: "number" },
           { label: "Number of chronic medications?", value: chronicMedsCnt, setter: setChronicMedsCnt, type: "number" }
         ].map(({ label, value, setter, type }, idx) => (
           <div key={idx} style={fieldStyle}>

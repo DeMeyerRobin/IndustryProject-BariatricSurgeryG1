@@ -58,16 +58,29 @@ const PatientDetail = () => {
         <Box mb={3}><Text><strong>Gender:</strong> {patient.gender}</Text></Box>
         <Box mb={3}><Text><strong>Height:</strong> {patient.height} cm</Text></Box>
         <Box mb={3}><Text><strong>Weight:</strong> {patient.weight} kg</Text></Box>
-        <Box mb={3}><Text><strong>Family Surgery Count:</strong> {patient.family_surgery_count}</Text></Box>
-        <Box mb={3}><Text><strong>Chronic Meds Count:</strong> {patient.chronic_meds_count}</Text></Box>
+        <Box mb={3}><Text><strong>Bmi:</strong> {patient.bmi}</Text></Box>
+        <Box mb={3}><Text><strong>Family Surgery Count:</strong> {patient.family_surgery_cnt}</Text></Box>
+        <Box mb={3}><Text><strong>Chronic Meds Count:</strong> {patient.chronic_meds_cnt}</Text></Box>
         <Box mb={3}><Text><strong>Procedure Category:</strong> {patient.procedure_category}</Text></Box>
         <Box mb={3}><Text><strong>Antibiotics:</strong> {patient.antibiotics}</Text></Box>
-        <Box mb={3}><Text><strong>Cholecystectomy Repair:</strong> {patient.cholecystectomy_repair === 1 ? 'Yes' : 'No'}</Text></Box>
-        <Box mb={3}><Text><strong>Hiatus Hernia Repair:</strong> {patient.hiatus_hernia_repair === 1 ? 'Yes' : 'No'}</Text></Box>
-        <Box mb={6}><Text><strong>Drain Used:</strong> {patient.drain === 1 ? 'Yes' : 'No'}</Text></Box>
+        <Box mb={3}><Text><strong>Cholecystectomy Repair:</strong> {patient.cholecystectomy_repair}</Text></Box>
+        <Box mb={3}><Text><strong>Hiatus Hernia Repair:</strong> {patient.hiatus_hernia_repair}</Text></Box>
+        <Box mb={10}><Text><strong>Drain Used:</strong> {patient.drain}</Text></Box>
+        <Box mb={6}><Text><strong>Risk Prediction:</strong> {patient.risk_pred} %</Text></Box>
 
         <Button onClick={() => navigate('/dashboard')} colorScheme="blue">
           Back to Dashboard
+        </Button>
+        <Button
+          ml={3}
+          onClick={() => navigate(`/patient/${id}/edit`)}
+          variant="outline"
+          borderColor="black"
+          color="black"
+          bg="transparent"
+          _hover={{ bg: "blackAlpha.100" }}
+        >
+          Edit File
         </Button>
       </Box>
     </Box>

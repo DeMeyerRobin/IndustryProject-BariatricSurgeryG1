@@ -11,7 +11,7 @@ import {
   Spacer,
   Flex,
 } from '@chakra-ui/react';
-
+import { FaMars, FaVenus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -20,6 +20,15 @@ const MainPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [patients, setPatients] = useState([]);
+  const [sortBy, setSortBy] = useState("name_asc");
+
+  const sortedPatients = [...patients].sort((a, b) => {
+    if (sortBy === "name_asc") return a.name.localeCompare(b.name);
+    if (sortBy === "name_desc") return b.name.localeCompare(a.name);
+    if (sortBy === "age_asc") return a.age - b.age;
+    if (sortBy === "age_desc") return b.age - a.age;
+    return 0;
+  });
 
   useEffect(() => {
     fetch('http://localhost:8000/my-patients', {
@@ -90,23 +99,40 @@ const MainPage = () => {
           </Button>
         </Flex>
         <Text color="gray.600">
-          Welcome back. Manage your patients and get surgical success predictions below.
+          Welcome back Dr. | today is {new Date().toLocaleDateString()}
         </Text>
       </Box>
 
       <Box bg="white" p={6} rounded="md" shadow="md">
         <Flex justify="space-between" align="center" mb={4}>
-          <Heading size="md">Patient List</Heading>
+        <Heading size="md">Patient List</Heading>
+        <Box>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            style={{
+              padding: '8px',
+              borderRadius: '4px',
+              border: '1px solid #CBD5E0',
+              marginRight: '12px'
+            }}
+          >
+            <option value="name_asc">Sort by Name (A–Z)</option>
+            <option value="name_desc">Sort by Name (Z–A)</option>
+            <option value="age_asc">Sort by Age (Youngest)</option>
+            <option value="age_desc">Sort by Age (Oldest)</option>
+          </select>
           <Button colorScheme="blue" onClick={() => navigate('/AddPatient')}>
             Add New Patient
           </Button>
-        </Flex>
+        </Box>
+      </Flex>
 
         <div>
           {patients.length === 0 ? (
             <p>No patients yet.</p>
           ) : (
-            patients.map((patient) => (
+            sortedPatients.map((patient) => (
               <div key={patient.idPatientInfo} style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -117,8 +143,12 @@ const MainPage = () => {
                 borderRadius: '8px'
               }}>
                 <div>
-                  <strong>{patient.name}</strong><br />
-                  Age: {patient.age}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <strong>{patient.name}</strong>
+                    {patient.gender === 'male' && <FaMars color="#3182CE" />}
+                    {patient.gender === 'female' && <FaVenus color="#D53F8C" />}
+                  </div>
+                  <div>Age: {patient.age}</div>
                 </div>
                 <button
                   onClick={() => navigate(`/patient/${patient.idPatientInfo}`)} // if you have a route like that

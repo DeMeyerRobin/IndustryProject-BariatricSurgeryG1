@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Float
 from db.database import Base
 
 class Doctor(Base):
@@ -18,10 +18,12 @@ class Patient(Base):
     gender = Column("Gender", String)
     height = Column("Height(cm)", Integer)
     weight = Column("Weight(kg)", Integer)
-    family_surgery_count = Column("FamilyHistCnt", Integer)
+    bmi = Column("Bmi", Float)
+    family_surgery_cnt = Column("FamilyHistCnt", Integer)
     chronic_meds_cnt = Column("ChronicMedsCnt", Integer)
     procedure_category = Column("ProcedureCategory", String)
     antibiotics = Column("Antibiotics", String)
     cholecystectomy_repair = Column("CholecystectomyRepair", String)
     hiatus_hernia_repair = Column("HiatusHerniaRepair", String)
     drain = Column("DrainUsed", String)
+    risk_pred = Column("ModelRiskPred", Float)

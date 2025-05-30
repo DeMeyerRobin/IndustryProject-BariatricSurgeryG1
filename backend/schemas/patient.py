@@ -6,7 +6,7 @@ class PatientCreate(BaseModel):
     gender: str
     height: int
     weight: int
-    family_surgery_count: int
+    family_surgery_cnt: int
     chronic_meds_cnt: int
     procedure_category: str
     antibiotics: str
