@@ -14,7 +14,6 @@ import {
 import logo from '../assets/Logo.png';
 
 const ProfilePage = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
   const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,7 +42,7 @@ const ProfilePage = () => {
         alert("Unable to load profile");
         navigate('/dashboard');
       });
-  }, [id, navigate]);
+  }, [navigate]);
 
   if (loading || !doctor) {
     return (
@@ -64,9 +63,15 @@ const ProfilePage = () => {
 
   return (
     <Box bg="gray.50" minH="100vh" py={10} px={6}>
-        <Center mb={10}>
+        <Flex justify="space-between" align="center" mb={10}>
+          <Button variant="ghost" onClick={() => navigate('/dashboard')}>
+            ← Back
+          </Button>
+          <Center flex="1">
             <img src={logo} alt="Logo" style={{ height: '80px' }} />
-        </Center>
+          </Center>
+          <Box w="75px" /> {/* Spacer to balance layout */}
+        </Flex>
 
         <Box bg="white" maxW="lg" mx="auto" p={6} rounded="lg" shadow="md">
         <VStack spacing={3} align="start">

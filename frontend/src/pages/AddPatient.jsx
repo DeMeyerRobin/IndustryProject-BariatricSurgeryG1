@@ -17,6 +17,7 @@ const AddPatient = () => {
   const [hiatusHerniaRepair, setHiatusHerniaRepair] = useState('');
   const [drain, setDrain] = useState('');
   const [nameError, setNameError] = useState('');
+  const [patientNotes, setPatientNotes] = useState('');
 
   const navigate = useNavigate();
 
@@ -62,7 +63,8 @@ const AddPatient = () => {
         antibiotics,
         cholecystectomy_repair: cholecystectomyRepair,
         hiatus_hernia_repair: hiatusHerniaRepair,
-        drain
+        drain,
+        patient_notes: patientNotes
       };
     
       fetch("http://localhost:8000/add_patient", {
@@ -241,6 +243,15 @@ const AddPatient = () => {
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
+        </div>
+        <div style={fieldStyle}>
+          <label style={labelStyle}>Patient Notes</label>
+          <textarea
+            style={{ ...inputStyle, height: '100px' }}
+            placeholder="Any extra notes for this patient"
+            value={patientNotes}
+            onChange={(e) => setPatientNotes(e.target.value)}
+          />
         </div>
 
         <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>

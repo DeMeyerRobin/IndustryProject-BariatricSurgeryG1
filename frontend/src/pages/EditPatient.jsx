@@ -193,6 +193,15 @@ const EditPatient = () => {
             </select>
           </div>
         ))}
+        <div style={fieldStyle}>
+          <label style={labelStyle}>Patient Notes</label>
+          <textarea
+            style={{ ...inputStyle, height: '100px' }}
+            value={patient.patient_notes || ''}
+            onChange={(e) => handleChange('patient_notes', e.target.value)}
+            placeholder="Any extra notes about the patient..."
+          />
+        </div>
 
         <button style={{ ...buttonStyle, backgroundColor: '#3182CE', color: 'white' }} onClick={handleUpdate}>
           Save Changes

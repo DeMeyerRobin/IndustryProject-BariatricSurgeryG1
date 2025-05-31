@@ -21,7 +21,6 @@ const MainPage = () => {
   const [loading, setLoading] = useState(true);
   const [patients, setPatients] = useState([]);
   const [sortBy, setSortBy] = useState("name_asc");
-  const [doctorId, setDoctorId] = useState(null);
 
   const sortedPatients = [...patients].sort((a, b) => {
     if (sortBy === "name_asc") return a.name.localeCompare(b.name);
@@ -57,7 +56,6 @@ const MainPage = () => {
         if (!data.logged_in) {
           navigate('/');
         } else {
-          setDoctorId(data.doctor_id);  // store doctor ID
           setLoading(false);
         }
       })
@@ -99,13 +97,10 @@ const MainPage = () => {
           <HStack spacing={4}>
             <Button
               variant="outline"
-              onClick={() => navigate(`/profile/${doctorId}`)}
+              onClick={() => navigate(`/profile`)}
             >
               Profile
             </Button>
-            {/* <Button colorScheme="red" variant="outline" onClick={handleLogout}>
-              Logout
-            </Button> */}
           </HStack>
         </Flex>
         <Text color="gray.600">
@@ -161,7 +156,7 @@ const MainPage = () => {
                   <div>Age: {patient.age}</div>
                 </div>
                 <button
-                  onClick={() => navigate(`/patient/${patient.idPatientInfo}`)} // if you have a route like that
+                  onClick={() => navigate(`/patient/${patient.idPatientInfo}`)}
                   style={{
                     background: '#3182CE',
                     color: 'white',

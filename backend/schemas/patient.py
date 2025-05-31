@@ -13,3 +13,4 @@ class PatientCreate(BaseModel):
     cholecystectomy_repair: str
     hiatus_hernia_repair: str
     drain: str
+    patient_notes: str

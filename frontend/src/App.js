@@ -18,7 +18,7 @@ function App() {
         <Route path="/AddPatient" element={<AddPatient />} />
         <Route path="/patient/:id" element={<PatientDetail />} />
         <Route path="/patient/:id/edit" element={<EditPatient />} />
-        <Route path="/profile/:id" element={<ProfilePage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>
   );

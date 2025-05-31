@@ -66,7 +66,30 @@ const PatientDetail = () => {
         <Box mb={3}><Text><strong>Cholecystectomy Repair:</strong> {patient.cholecystectomy_repair}</Text></Box>
         <Box mb={3}><Text><strong>Hiatus Hernia Repair:</strong> {patient.hiatus_hernia_repair}</Text></Box>
         <Box mb={10}><Text><strong>Drain Used:</strong> {patient.drain}</Text></Box>
-        <Box mb={6}><Text><strong>Risk Prediction:</strong> {patient.risk_pred} %</Text></Box>
+        <Box mb={10}><Text><strong>Patient Notes:</strong> {patient.patient_notes}</Text></Box>
+        <Box mb={6}>
+          <Text mb={2}><strong>AI Risk Prediction:</strong> {patient.risk_pred}%</Text>
+          <Box
+            w="100%"
+            h="20px"
+            bg="gray.200"
+            borderRadius="md"
+            overflow="hidden"
+          >
+            <Box
+              h="100%"
+              w={`${patient.risk_pred}%`}
+              bg={
+                patient.risk_pred < 20
+                  ? 'green.400'
+                  : patient.risk_pred < 50
+                  ? 'orange.400'
+                  : 'red.500'
+              }
+              transition="width 0.5s ease-in-out"
+            />
+          </Box>
+        </Box>
 
         <Box display="flex" gap={3} mt={6}>
           <Button onClick={() => navigate('/dashboard')} colorScheme="blue">

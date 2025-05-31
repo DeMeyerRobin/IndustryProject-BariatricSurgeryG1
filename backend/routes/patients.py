@@ -109,7 +109,8 @@ async def get_patient(
         "cholecystectomy_repair": convert_01_to_yesno(patient.cholecystectomy_repair),
         "hiatus_hernia_repair": convert_01_to_yesno(patient.hiatus_hernia_repair),
         "drain": convert_01_to_yesno(patient.drain),
-        "risk_pred": patient.risk_pred
+        "risk_pred": patient.risk_pred,
+        "patient_notes": patient.patient_notes
     }
 
 
