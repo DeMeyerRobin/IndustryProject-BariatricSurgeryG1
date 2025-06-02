@@ -3,6 +3,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
+const cmOptions = [
+  'CM_AIDS', 'CM_ANEMDEF', 'CM_ARTH', 'CM_CHF', 'CM_DEPRESS',
+  'CM_DM', 'CM_DMCX', 'CM_HTN_C', 'CM_HYPOTHY', 'CM_LIVER',
+  'CM_OBESE', 'CM_PSYCH', 'CM_SMOKE', 'CM_APNEA', 'CM_CHOLSTRL',
+  'CM_OSTARTH', 'CM_HPLD'
+];
+
 const AddPatient = () => {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
@@ -17,6 +24,8 @@ const AddPatient = () => {
   const [hiatusHerniaRepair, setHiatusHerniaRepair] = useState('');
   const [nameError, setNameError] = useState('');
   const [patientNotes, setPatientNotes] = useState('');
+  const [comorbidities, setComorbidities] = useState([]);
+  const [comorbidityErrors, setComorbidityErrors] = useState([]);
 
   const navigate = useNavigate();
 
@@ -49,20 +58,38 @@ const AddPatient = () => {
       }
     
       const parseOrZero = (val) => val ? parseInt(val) : 0;
-    
+
+      // Start all CM values at 0
+      const cmValues = {};
+      cmOptions.forEach(opt => cmValues[opt] = 0);
+
+      // Override with selected ones
+      comorbidities.forEach(({ key, value }) => {
+        if (key) cmValues[key] = value;
+      });
+
+      // Validate comorbidities
+      const newErrors = comorbidities.map(cm => !cm.key);
+      setComorbidityErrors(newErrors);
+
+      if (newErrors.some(err => err)) {
+        return; // prevent submission
+      }
+
       const patientData = {
         name,
         age: parseOrZero(age),
-        gender,
+        gender_Male: gender,
         height: parseOrZero(height),
         weight: parseOrZero(weight),
-        family_surgery_cnt: parseOrZero(familySurgeryCnt),
+        family_hist_cnt: parseOrZero(familySurgeryCnt),
         chronic_meds_cnt: parseOrZero(chronicMedsCnt),
         procedure_category: procedureCategory,
         antibiotics,
         cholecystectomy_repair: cholecystectomyRepair,
         hiatus_hernia_repair: hiatusHerniaRepair,
-        patient_notes: patientNotes
+        patient_notes: patientNotes,
+        ...cmValues
       };
     
       fetch("http://localhost:8000/add_patient", {
@@ -193,6 +220,7 @@ const AddPatient = () => {
             <option value="Sleeve">Sleeve</option>
             <option value="RYGBP">RYGBP</option>
             <option value="Mini gastric bypass (OAGB)">Mini gastric bypass (OAGB)</option>
+            <option value="BPD -DS">BPD -DS</option>
           </select>
         </div>
         <div style={fieldStyle}>
@@ -240,6 +268,62 @@ const AddPatient = () => {
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
+        </div>
+        <div style={{ marginTop: '24px' }}>
+          <h3 style={headingStyle}>Comorbidities</h3>
+          {comorbidities.map((cm, index) => (
+            <div key={index} style={{ ...fieldStyle, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <select
+                  style={{ ...inputStyle, flex: 1 }}
+                  value={cm.key}
+                  onChange={(e) => {
+                    const newCm = [...comorbidities];
+                    newCm[index].key = e.target.value;
+                    setComorbidities(newCm);
+
+                    const newErrors = [...comorbidityErrors];
+                    newErrors[index] = !e.target.value;
+                    setComorbidityErrors(newErrors);
+                  }}
+                >
+                  <option value="">Select Condition</option>
+                  {cmOptions.map(opt => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
+                <input
+                  type="number"
+                  placeholder="Severity (e.g., 1)"
+                  style={{ ...inputStyle, flex: 1 }}
+                  value={cm.value}
+                  onChange={(e) => {
+                    const newCm = [...comorbidities];
+                    newCm[index].value = parseInt(e.target.value) || 0;
+                    setComorbidities(newCm);
+                  }}
+                />
+              </div>
+              {comorbidityErrors[index] && (
+                <span style={{ color: 'red', fontSize: '14px' }}>
+                  Please select a condition.
+                </span>
+              )}
+            </div>
+          ))}
+          <button
+            onClick={() => setComorbidities([...comorbidities, { key: '', value: 0 }])}
+            style={{
+              marginTop: '8px',
+              backgroundColor: '#EDF2F7',
+              border: '1px solid #CBD5E0',
+              borderRadius: '4px',
+              padding: '6px 12px',
+              cursor: 'pointer'
+            }}
+          >
+            + Add Comorbidity
+          </button>
         </div>
         <div style={fieldStyle}>
           <label style={labelStyle}>Patient Notes</label>
