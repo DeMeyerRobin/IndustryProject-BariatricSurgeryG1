@@ -27,6 +27,5 @@ class Patient(Base):
     antibiotics = Column("Antibiotics", String)
     cholecystectomy_repair = Column("CholecystectomyRepair", String)
     hiatus_hernia_repair = Column("HiatusHerniaRepair", String)
-    drain = Column("DrainUsed", String)
     risk_pred = Column("ModelRiskPred", Float)
     patient_notes = Column("PatientNotes", String)

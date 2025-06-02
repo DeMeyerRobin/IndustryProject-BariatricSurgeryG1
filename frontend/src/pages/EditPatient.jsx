@@ -42,7 +42,6 @@ const EditPatient = () => {
     // Set default 'no' for missing optional fields
     cleanedPatient.cholecystectomy_repair = cleanedPatient.cholecystectomy_repair || 'no';
     cleanedPatient.hiatus_hernia_repair = cleanedPatient.hiatus_hernia_repair || 'no';
-    cleanedPatient.drain = cleanedPatient.drain || 'no';
 
     console.log(cleanedPatient);
   
@@ -177,7 +176,6 @@ const EditPatient = () => {
         {[
           { label: 'Cholecystectomy Repair', field: 'cholecystectomy_repair' },
           { label: 'Hiatus Hernia Repair', field: 'hiatus_hernia_repair' },
-          { label: 'Drain Used', field: 'drain' }
         ].map(({ label, field }) => (
           <div key={field} style={fieldStyle}>
             <label style={labelStyle}>{label}</label>

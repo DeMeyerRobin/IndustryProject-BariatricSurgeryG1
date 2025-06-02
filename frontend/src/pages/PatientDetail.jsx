@@ -65,7 +65,6 @@ const PatientDetail = () => {
         <Box mb={3}><Text><strong>Antibiotics:</strong> {patient.antibiotics}</Text></Box>
         <Box mb={3}><Text><strong>Cholecystectomy Repair:</strong> {patient.cholecystectomy_repair}</Text></Box>
         <Box mb={3}><Text><strong>Hiatus Hernia Repair:</strong> {patient.hiatus_hernia_repair}</Text></Box>
-        <Box mb={10}><Text><strong>Drain Used:</strong> {patient.drain}</Text></Box>
         <Box mb={10}><Text><strong>Patient Notes:</strong> {patient.patient_notes}</Text></Box>
         <Box mb={6}>
           <Text mb={2}><strong>AI Risk Prediction:</strong> {patient.risk_pred}%</Text>

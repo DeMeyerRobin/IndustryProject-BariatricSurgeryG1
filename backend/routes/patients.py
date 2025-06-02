@@ -39,7 +39,6 @@ async def add_patient(
     # Convert 'yes'/'no' to 1/0
     data_dict["cholecystectomy_repair"] = convert_yes_no(data_dict["cholecystectomy_repair"])
     data_dict["hiatus_hernia_repair"] = convert_yes_no(data_dict["hiatus_hernia_repair"])
-    data_dict["drain"] = convert_yes_no(data_dict["drain"])
 
     # Calculate BMI
     try:
@@ -108,7 +107,6 @@ async def get_patient(
         "antibiotics": patient.antibiotics,
         "cholecystectomy_repair": convert_01_to_yesno(patient.cholecystectomy_repair),
         "hiatus_hernia_repair": convert_01_to_yesno(patient.hiatus_hernia_repair),
-        "drain": convert_01_to_yesno(patient.drain),
         "risk_pred": patient.risk_pred,
         "patient_notes": patient.patient_notes
     }
@@ -132,7 +130,6 @@ def update_patient(patient_id: int, data: PatientCreate, request: Request, db: S
     # Convert 'yes'/'no' to 1/0 like in /add_patient
     data_dict["cholecystectomy_repair"] = convert_yes_no(data_dict["cholecystectomy_repair"])
     data_dict["hiatus_hernia_repair"] = convert_yes_no(data_dict["hiatus_hernia_repair"])
-    data_dict["drain"] = convert_yes_no(data_dict["drain"])
 
     # Update patient fields
     for key, value in data_dict.items():

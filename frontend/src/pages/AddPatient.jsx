@@ -15,7 +15,6 @@ const AddPatient = () => {
   const [antibiotics, setAntibiotics] = useState('');
   const [cholecystectomyRepair, setCholecystectomyRepair] = useState('');
   const [hiatusHerniaRepair, setHiatusHerniaRepair] = useState('');
-  const [drain, setDrain] = useState('');
   const [nameError, setNameError] = useState('');
   const [patientNotes, setPatientNotes] = useState('');
 
@@ -63,7 +62,6 @@ const AddPatient = () => {
         antibiotics,
         cholecystectomy_repair: cholecystectomyRepair,
         hiatus_hernia_repair: hiatusHerniaRepair,
-        drain,
         patient_notes: patientNotes
       };
     
@@ -216,7 +214,6 @@ const AddPatient = () => {
         {[
           { label: "Cholecystectomy repair?", value: cholecystectomyRepair, setter: setCholecystectomyRepair },
           { label: "Hiatus hernia repair?", value: hiatusHerniaRepair, setter: setHiatusHerniaRepair },
-          { label: "Drain used?", value: drain, setter: setDrain }
         ].map(({ label, value, setter }, idx) => (
           <div key={idx} style={fieldStyle}>
             <label style={labelStyle}>{label}</label>
