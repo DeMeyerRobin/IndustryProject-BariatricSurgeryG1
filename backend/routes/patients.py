@@ -342,6 +342,8 @@ def update_patient(
 
     patient.bmi = bmi
     patient.risk_pred = risk_pred
+    if patient.patient_notes is None:
+        patient.patient_notes = ""
 
     db.commit()
     return {"status": "success"}

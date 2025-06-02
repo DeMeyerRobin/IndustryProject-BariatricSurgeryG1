@@ -74,38 +74,61 @@ const PatientDetail = () => {
         <Box mb={3}><Text><strong>Hiatus Hernia Repair:</strong> {patient.hiatus_hernia_repair}</Text></Box>
         <Box mb={6}>
         <Heading size="md" mb={3}>Comorbidities</Heading>
-        {cmOptions.map(key => (
-          <Box key={key} mb={2}>
-            <Text>
-              <strong>{key.replace('CM_', '').replace('_', ' ')}:</strong>{" "}
-              {patient[key] === null || patient[key] === undefined ? 'Not specified' : patient[key]}
-            </Text>
-          </Box>
+        {cmOptions
+          .filter(key => patient[key] !== 0 && patient[key] !== null && patient[key] !== undefined)
+          .map(key => (
+            <Box key={key} mb={2}>
+              <Text>
+                <strong>{key.replace('CM_', '').replace('_', ' ')}:</strong>{" "}
+                {patient[key]}
+              </Text>
+            </Box>
         ))}
       </Box>
         <Box mb={10}><Text><strong>Patient Notes:</strong> {patient.patient_notes}</Text></Box>
         <Box mb={6}>
-          <Text mb={2}><strong>AI Risk Prediction:</strong> {patient.risk_pred}%</Text>
-          <Box
-            w="100%"
-            h="20px"
-            bg="gray.200"
-            borderRadius="md"
-            overflow="hidden"
-          >
-            <Box
-              h="100%"
-              w={`${patient.risk_pred}%`}
-              bg={
-                patient.risk_pred < 20
-                  ? 'green.400'
-                  : patient.risk_pred < 50
-                  ? 'orange.400'
-                  : 'red.500'
-              }
-              transition="width 0.5s ease-in-out"
-            />
-          </Box>
+          <Text mb={2}><strong>BMI Class:</strong> {
+            patient.bmi < 18.5 ? 'Underweight' :
+            patient.bmi < 25 ? 'Normal weight' :
+            patient.bmi < 30 ? 'Overweight' :
+            patient.bmi < 35 ? 'Obesity Class I' :
+            patient.bmi < 40 ? 'Obesity Class II' :
+            'Obesity Class III'
+          }</Text>
+
+          {(patient.bmi >= 25) ? (
+            <>
+              <Text mb={2}><strong>AI Risk Prediction For Bariatric Surgery:</strong> {patient.risk_pred}%</Text>
+              <Box w="100%" h="20px" bg="gray.200" borderRadius="md" overflow="hidden">
+                <Box
+                  h="100%"
+                  w={`${patient.risk_pred}%`}
+                  bg={
+                    patient.risk_pred < 10
+                      ? 'green.400'
+                      : patient.risk_pred < 40
+                      ? 'orange.400'
+                      : 'red.500'
+                  }
+                  transition="width 0.5s ease-in-out"
+                />
+              </Box>
+
+              <Text mt={2} fontSize="sm" color="gray.600">
+                {
+                  patient.risk_pred < 10
+                    ? 'Mild Risk – Likely a good candidate for surgery.'
+                    : patient.risk_pred < 40
+                    ? 'Moderate Risk – Caution advised; additional assessment recommended.'
+                    : 'High Risk – Bariatric surgery may not be advisable without further evaluation.'
+                }
+              </Text>
+            </>
+          ) : (
+            <Text mt={2} fontSize="sm" color="green.600">
+              ✅ No bariatric surgery required – Patient appears healthy.
+            </Text>
+          )}
         </Box>
 
         <Box display="flex" gap={3} mt={6}>
