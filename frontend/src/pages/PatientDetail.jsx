@@ -3,6 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Heading, Text, Spinner, Button } from '@chakra-ui/react';
 
+const cmOptions = [
+  'CM_AIDS', 'CM_ANEMDEF', 'CM_ARTH', 'CM_CHF', 'CM_DEPRESS',
+  'CM_DM', 'CM_DMCX', 'CM_HTN_C', 'CM_HYPOTHY', 'CM_LIVER',
+  'CM_OBESE', 'CM_PSYCH', 'CM_SMOKE', 'CM_APNEA', 'CM_CHOLSTRL',
+  'CM_OSTARTH', 'CM_HPLD'
+];
+
 const PatientDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -59,12 +66,23 @@ const PatientDetail = () => {
         <Box mb={3}><Text><strong>Height:</strong> {patient.height} cm</Text></Box>
         <Box mb={3}><Text><strong>Weight:</strong> {patient.weight} kg</Text></Box>
         <Box mb={3}><Text><strong>Bmi:</strong> {patient.bmi}</Text></Box>
-        <Box mb={3}><Text><strong>Family Surgery Count:</strong> {patient.family_surgery_cnt}</Text></Box>
+        <Box mb={3}><Text><strong>Family Surgery Count:</strong> {patient.family_hist_cnt}</Text></Box>
         <Box mb={3}><Text><strong>Chronic Meds Count:</strong> {patient.chronic_meds_cnt}</Text></Box>
         <Box mb={3}><Text><strong>Procedure Category:</strong> {patient.procedure_category}</Text></Box>
         <Box mb={3}><Text><strong>Antibiotics:</strong> {patient.antibiotics}</Text></Box>
         <Box mb={3}><Text><strong>Cholecystectomy Repair:</strong> {patient.cholecystectomy_repair}</Text></Box>
         <Box mb={3}><Text><strong>Hiatus Hernia Repair:</strong> {patient.hiatus_hernia_repair}</Text></Box>
+        <Box mb={6}>
+        <Heading size="md" mb={3}>Comorbidities</Heading>
+        {cmOptions.map(key => (
+          <Box key={key} mb={2}>
+            <Text>
+              <strong>{key.replace('CM_', '').replace('_', ' ')}:</strong>{" "}
+              {patient[key] === null || patient[key] === undefined ? 'Not specified' : patient[key]}
+            </Text>
+          </Box>
+        ))}
+      </Box>
         <Box mb={10}><Text><strong>Patient Notes:</strong> {patient.patient_notes}</Text></Box>
         <Box mb={6}>
           <Text mb={2}><strong>AI Risk Prediction:</strong> {patient.risk_pred}%</Text>

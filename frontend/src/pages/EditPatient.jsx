@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
+const cmOptions = [
+  'CM_AIDS', 'CM_ANEMDEF', 'CM_ARTH', 'CM_CHF', 'CM_DEPRESS',
+  'CM_DM', 'CM_DMCX', 'CM_HTN_C', 'CM_HYPOTHY', 'CM_LIVER',
+  'CM_OBESE', 'CM_PSYCH', 'CM_SMOKE', 'CM_APNEA', 'CM_CHOLSTRL',
+  'CM_OSTARTH', 'CM_HPLD'
+];
+
 const EditPatient = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [comorbidities, setComorbidities] = useState([]);
+  const [comorbidityErrors, setComorbidityErrors] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:8000/check-session", { credentials: "include" })
@@ -16,7 +25,15 @@ const EditPatient = () => {
         } else {
           fetch(`http://localhost:8000/patient/${id}`, { credentials: 'include' })
             .then(res => res.json())
-            .then(setPatient)
+            .then(data => {
+              setPatient(data);
+            
+              const filled = cmOptions
+                .filter(cm => data[cm] !== null && data[cm] !== undefined && data[cm] !== 0)
+                .map(cm => ({ key: cm, value: data[cm] }));
+            
+              setComorbidities(filled);
+            })
             .catch(() => alert("Failed to load patient"))
             .finally(() => setLoading(false));
         }
@@ -37,14 +54,25 @@ const EditPatient = () => {
       id,
       ...cleanedPatient
     } = patient;
-    
-
+  
     // Set default 'no' for missing optional fields
     cleanedPatient.cholecystectomy_repair = cleanedPatient.cholecystectomy_repair || 'no';
     cleanedPatient.hiatus_hernia_repair = cleanedPatient.hiatus_hernia_repair || 'no';
-
-    console.log(cleanedPatient);
   
+    // Reset all comorbidities to 0
+    cmOptions.forEach(key => cleanedPatient[key] = 0);
+  
+    // Fill with values from current form state
+    comorbidities.forEach(({ key, value }) => {
+      if (key) cleanedPatient[key] = parseInt(value) || 0;
+    });
+  
+    // Convert gender to gender_Male (1 if male, 0 otherwise)
+    cleanedPatient.gender_Male = patient.gender
+    delete cleanedPatient.gender; // Remove the original 'gender' field
+  
+    // Send update request
+    console.log(cleanedPatient);
     fetch(`http://localhost:8000/patient/${id}/update`, {
       method: 'PUT',
       credentials: 'include',
@@ -115,7 +143,7 @@ const EditPatient = () => {
           { label: 'Age', field: 'age', type: 'number' },
           { label: 'Height (cm)', field: 'height', type: 'number' },
           { label: 'Weight (kg)', field: 'weight', type: 'number' },
-          { label: 'Family Surgery Count', field: 'family_surgery_cnt', type: 'number' },
+          { label: 'Family Surgery Count', field: 'family_hist_cnt', type: 'number' },
           { label: 'Chronic Meds Count', field: 'chronic_meds_cnt', type: 'number' }
         ].map(({ label, field, type = 'text' }) => (
           <div key={field} style={fieldStyle}>
@@ -191,6 +219,62 @@ const EditPatient = () => {
             </select>
           </div>
         ))}
+        <div style={{ marginTop: '24px' }}>
+          <h3 style={{ fontSize: '20px', fontWeight: 'bold' }}>Comorbidities</h3>
+          {comorbidities.map((cm, index) => (
+            <div key={index} style={{ ...fieldStyle, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <select
+                  style={{ ...inputStyle, flex: 1 }}
+                  value={cm.key}
+                  onChange={(e) => {
+                    const newCm = [...comorbidities];
+                    newCm[index].key = e.target.value;
+                    setComorbidities(newCm);
+
+                    const newErrors = [...comorbidityErrors];
+                    newErrors[index] = !e.target.value;
+                    setComorbidityErrors(newErrors);
+                  }}
+                >
+                  <option value="">Select Condition</option>
+                  {cmOptions.map(opt => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
+                <input
+                  type="number"
+                  placeholder="Severity (e.g., 1)"
+                  style={{ ...inputStyle, flex: 1 }}
+                  value={cm.value}
+                  onChange={(e) => {
+                    const newCm = [...comorbidities];
+                    newCm[index].value = parseInt(e.target.value) || 0;
+                    setComorbidities(newCm);
+                  }}
+                />
+              </div>
+              {comorbidityErrors[index] && (
+                <span style={{ color: 'red', fontSize: '14px' }}>
+                  Please select a condition.
+                </span>
+              )}
+            </div>
+          ))}
+          <button
+            onClick={() => setComorbidities([...comorbidities, { key: '', value: 0 }])}
+            style={{
+              marginTop: '8px',
+              backgroundColor: '#EDF2F7',
+              border: '1px solid #CBD5E0',
+              borderRadius: '4px',
+              padding: '6px 12px',
+              cursor: 'pointer'
+            }}
+          >
+            + Add Comorbidity
+          </button>
+        </div>
         <div style={fieldStyle}>
           <label style={labelStyle}>Patient Notes</label>
           <textarea
