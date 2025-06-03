@@ -53,7 +53,7 @@ def get_db():
         db.close()
 
 
-model = load("best_model_pipeline.pkl")
+model = load("best_model_pipeline_R42.pkl")
 
 @router.post("/add_patient")
 async def add_patient(
