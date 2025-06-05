@@ -3,13 +3,30 @@ from pydantic import BaseModel
 class PatientCreate(BaseModel):
     name: str
     age: int
-    gender: str
+    gender_Male: str
     height: int
     weight: int
-    family_surgery_cnt: int
+    family_hist_cnt: int
     chronic_meds_cnt: int
     procedure_category: str
     antibiotics: str
     cholecystectomy_repair: str
     hiatus_hernia_repair: str
     patient_notes: str
+    CM_AIDS: int
+    CM_ANEMDEF: int
+    CM_ARTH: int
+    CM_CHF: int
+    CM_DEPRESS: int
+    CM_DM: int
+    CM_DMCX: int
+    CM_HTN_C: int
+    CM_HYPOTHY: int
+    CM_LIVER: int
+    CM_OBESE: int
+    CM_PSYCH: int
+    CM_SMOKE: int
+    CM_APNEA: int
+    CM_CHOLSTRL: int
+    CM_OSTARTH: int
+    CM_HPLD: int

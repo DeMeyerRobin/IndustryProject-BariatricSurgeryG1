@@ -3,6 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Heading, Text, Spinner, Button } from '@chakra-ui/react';
 
+const cmOptions = [
+  'CM_AIDS', 'CM_ANEMDEF', 'CM_ARTH', 'CM_CHF', 'CM_DEPRESS',
+  'CM_DM', 'CM_DMCX', 'CM_HTN_C', 'CM_HYPOTHY', 'CM_LIVER',
+  'CM_OBESE', 'CM_PSYCH', 'CM_SMOKE', 'CM_APNEA', 'CM_CHOLSTRL',
+  'CM_OSTARTH', 'CM_HPLD'
+];
+
 const PatientDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -59,35 +66,69 @@ const PatientDetail = () => {
         <Box mb={3}><Text><strong>Height:</strong> {patient.height} cm</Text></Box>
         <Box mb={3}><Text><strong>Weight:</strong> {patient.weight} kg</Text></Box>
         <Box mb={3}><Text><strong>Bmi:</strong> {patient.bmi}</Text></Box>
-        <Box mb={3}><Text><strong>Family Surgery Count:</strong> {patient.family_surgery_cnt}</Text></Box>
+        <Box mb={3}><Text><strong>Family Surgery Count:</strong> {patient.family_hist_cnt}</Text></Box>
         <Box mb={3}><Text><strong>Chronic Meds Count:</strong> {patient.chronic_meds_cnt}</Text></Box>
         <Box mb={3}><Text><strong>Procedure Category:</strong> {patient.procedure_category}</Text></Box>
         <Box mb={3}><Text><strong>Antibiotics:</strong> {patient.antibiotics}</Text></Box>
         <Box mb={3}><Text><strong>Cholecystectomy Repair:</strong> {patient.cholecystectomy_repair}</Text></Box>
         <Box mb={3}><Text><strong>Hiatus Hernia Repair:</strong> {patient.hiatus_hernia_repair}</Text></Box>
+        <Box mb={6}>
+        <Heading size="md" mb={3}>Comorbidities</Heading>
+        {cmOptions
+          .filter(key => patient[key] !== 0 && patient[key] !== null && patient[key] !== undefined)
+          .map(key => (
+            <Box key={key} mb={2}>
+              <Text>
+                <strong>{key.replace('CM_', '').replace('_', ' ')}:</strong>{" "}
+                {patient[key]}
+              </Text>
+            </Box>
+        ))}
+      </Box>
         <Box mb={10}><Text><strong>Patient Notes:</strong> {patient.patient_notes}</Text></Box>
         <Box mb={6}>
-          <Text mb={2}><strong>AI Risk Prediction:</strong> {patient.risk_pred}%</Text>
-          <Box
-            w="100%"
-            h="20px"
-            bg="gray.200"
-            borderRadius="md"
-            overflow="hidden"
-          >
-            <Box
-              h="100%"
-              w={`${patient.risk_pred}%`}
-              bg={
-                patient.risk_pred < 20
-                  ? 'green.400'
-                  : patient.risk_pred < 50
-                  ? 'orange.400'
-                  : 'red.500'
-              }
-              transition="width 0.5s ease-in-out"
-            />
-          </Box>
+          <Text mb={2}><strong>BMI Class:</strong> {
+            patient.bmi < 18.5 ? 'Underweight' :
+            patient.bmi < 25 ? 'Normal weight' :
+            patient.bmi < 30 ? 'Overweight' :
+            patient.bmi < 35 ? 'Obesity Class I' :
+            patient.bmi < 40 ? 'Obesity Class II' :
+            'Obesity Class III'
+          }</Text>
+
+          {(patient.bmi >= 25) ? (
+            <>
+              <Text mb={2}><strong>AI Risk Prediction For Bariatric Surgery:</strong> {patient.risk_pred}%</Text>
+              <Box w="100%" h="20px" bg="gray.200" borderRadius="md" overflow="hidden">
+                <Box
+                  h="100%"
+                  w={`${patient.risk_pred}%`}
+                  bg={
+                    patient.risk_pred < 10
+                      ? 'green.400'
+                      : patient.risk_pred < 40
+                      ? 'orange.400'
+                      : 'red.500'
+                  }
+                  transition="width 0.5s ease-in-out"
+                />
+              </Box>
+
+              <Text mt={2} fontSize="sm" color="gray.600">
+                {
+                  patient.risk_pred < 10
+                    ? 'Mild Risk – Likely a good candidate for surgery.'
+                    : patient.risk_pred < 40
+                    ? 'Moderate Risk – Caution advised; additional assessment recommended.'
+                    : 'High Risk – Bariatric surgery may not be advisable without further evaluation.'
+                }
+              </Text>
+            </>
+          ) : (
+            <Text mt={2} fontSize="sm" color="green.600">
+              ✅ No bariatric surgery required – Patient appears healthy.
+            </Text>
+          )}
         </Box>
 
         <Box display="flex" gap={3} mt={6}>
