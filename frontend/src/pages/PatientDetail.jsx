@@ -96,7 +96,7 @@ const PatientDetail = () => {
             'Obesity Class III'
           }</Text>
 
-          {(patient.bmi >= 25) ? (
+          {(patient.bmi >= 25 || patient.risk_pred > 10) && patient.age > 0 && patient.height > 0 && patient.weight > 0 ? (
             <>
               <Text mb={2}><strong>AI Risk Prediction For Bariatric Surgery:</strong> {patient.risk_pred}%</Text>
               <Box w="100%" h="20px" bg="gray.200" borderRadius="md" overflow="hidden">
@@ -123,12 +123,27 @@ const PatientDetail = () => {
                     : 'High Risk – Bariatric surgery may not be advisable without further evaluation.'
                 }
               </Text>
+              <Text mt={3} fontSize="sm" color="gray.500">
+                This AI model is approximately 70% accurate.{" "}
+                <Text
+                  as="span"
+                  color="blue.500"
+                  textDecoration="underline"
+                  cursor="pointer"
+                  onClick={() => navigate('/AI-info')}
+                >
+                  Learn more
+                </Text>
+              </Text>
             </>
           ) : (
-            <Text mt={2} fontSize="sm" color="green.600">
-              ✅ No bariatric surgery required – Patient appears healthy.
-            </Text>
+            <><Text mb={2}><strong>AI Risk Prediction For Bariatric Surgery:</strong> </Text><Text mt={2} fontSize="sm" color={patient.bmi < 25 ? "green.600" : "orange.600"}>
+                {patient.age > 0 && patient.height > 0 && patient.weight > 0
+                  ? '✅ No bariatric surgery required – Patient appears healthy.'
+                  : '⚠️ Not enough information to assess risk. Please ensure that at least, age, height, and weight are provided.'}
+              </Text></>
           )}
+
         </Box>
 
         <Box display="flex" gap={3} mt={6}>
