@@ -7,6 +7,7 @@ import AddPatient from './pages/AddPatient';
 import PatientDetail from './pages/PatientDetail';
 import EditPatient from './pages/EditPatient';
 import ProfilePage from './pages/ProfilePage';
+import AIInfo from './pages/AIInfo';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/patient/:id" element={<PatientDetail />} />
         <Route path="/patient/:id/edit" element={<EditPatient />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/AI-info" element={<AIInfo />} />
       </Routes>
     </Router>
   );
