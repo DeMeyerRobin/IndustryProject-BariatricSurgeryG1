@@ -344,6 +344,20 @@ def update_patient(
         model_input_df = pd.DataFrame([[model_input[col] for col in model_feature_order]], columns=model_feature_order)
         y_proba = model.predict_proba(model_input_df)[0, 1]
         risk_pred = round(float(y_proba) * 100, 2)
+
+        # NEW: Predict weight loss percentage using Lasso regression
+        weight_loss_features = [
+            "age", "height", "weight", "bmi", "family_hist_cnt", "chronic_meds_cnt",
+            "CM_AIDS", "CM_DEPRESS", "CM_DM", "CM_DMCX", "CM_HTN_C",
+            "CM_HYPOTHY", "CM_LIVER", "CM_OBESE", "CM_SMOKE", "CM_APNEA",
+            "CM_CHOLSTRL", "CM_OSTARTH", "CM_HPLD", "gender_Male",
+            "procedure_category_Mini gastric bypass (OAGB)", "procedure_category_RYGBP",
+            "procedure_category_SADI", "procedure_category_Sleeve",
+            "antibiotics_Augmentin", "antibiotics_Clindamycin", "antibiotics_Invanz", "antibiotics_Kefsol"
+        ]
+        weight_loss_model_input = model_input_df[weight_loss_features]
+        weight_loss_pred = float(weight_loss_model.predict(weight_loss_model_input)[0])
+        weight_loss_pred = round(weight_loss_pred, 2)
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
@@ -363,6 +377,7 @@ def update_patient(
 
     patient.bmi = bmi
     patient.risk_pred = risk_pred
+    patient.weight_loss_pred = weight_loss_pred
     if patient.patient_notes is None:
         patient.patient_notes = ""
 

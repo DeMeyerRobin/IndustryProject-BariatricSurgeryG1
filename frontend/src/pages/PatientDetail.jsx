@@ -153,13 +153,22 @@ const PatientDetail = () => {
                       transition="width 0.5s ease-in-out"
                     />
                   </Box>
-                  <Text mt={2} fontSize="sm" color="gray.600">
-                    {patient.weight_loss_pred >= 30
-                      ? '✅ Strong expected improvement in patient weight.'
-                      : patient.weight_loss_pred >= 15
-                      ? '⚠️ Moderate weight loss predicted – encourage additional lifestyle change.'
-                      : '❗️Low predicted impact – consult clinical team for further action.'}
+                  <Text mt={2} fontSize="sm" color="gray.700">
+                    If successful, the patient's future weight may be approximately{" "}
+                    <strong>{(patient.weight - (patient.weight * (patient.weight_loss_pred / 100))).toFixed(1)} kg</strong>.
                   </Text>
+                  <Text mt={3} fontSize="sm" color="gray.500">
+                    This model predicts weight loss with an average error of around 7%.{" "}
+                    <Text
+                      as="span"
+                      color="blue.500"
+                      textDecoration="underline"
+                      cursor="pointer"
+                      onClick={() => navigate('/AI-info')}
+                    >
+                      Learn more
+                      </Text>
+                    </Text>
                 </Box>
                 )}
 
