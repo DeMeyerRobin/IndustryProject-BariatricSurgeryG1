@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Heading, Text, Spinner, Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
-const AIInfo = () => {
+const AIInfoRiskModel = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
@@ -28,7 +28,7 @@ const AIInfo = () => {
   return (
     <Box bg="gray.100" minH="100vh" p={8}>
       <Box bg="white" p={6} rounded="md" shadow="md" maxW="4xl" mx="auto">
-        <Heading mb={6}>About the AI Model</Heading>
+        <Heading mb={6}>About the AI Risk Prediction Model</Heading>
 
         <Box mb={5}>
             <Heading size="md" mb={2}>Model Overview</Heading>
@@ -80,4 +80,4 @@ const AIInfo = () => {
   );
 };
 
-export default AIInfo;
+export default AIInfoRiskModel;

@@ -7,7 +7,8 @@ import AddPatient from './pages/AddPatient';
 import PatientDetail from './pages/PatientDetail';
 import EditPatient from './pages/EditPatient';
 import ProfilePage from './pages/ProfilePage';
-import AIInfo from './pages/AIInfo';
+import AIInfoRiskModel from './pages/AIInfoRiskModel';
+import AIInfoWeightLossModel from './pages/AIInfoWeightLossModel';
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
         <Route path="/patient/:id" element={<PatientDetail />} />
         <Route path="/patient/:id/edit" element={<EditPatient />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/AI-info" element={<AIInfo />} />
+        <Route path="/AI-info/risk-model" element={<AIInfoRiskModel />} />
+        <Route path="/AI-info/weight-loss-model" element={<AIInfoWeightLossModel />} />
       </Routes>
     </Router>
   );
