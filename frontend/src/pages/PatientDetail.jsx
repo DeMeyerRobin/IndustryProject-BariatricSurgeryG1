@@ -36,6 +36,7 @@ const PatientDetail = () => {
             })
             .then(data => {
               setPatient(data);
+              console.log(data);
               setLoading(false);
             })
             .catch(err => {
@@ -133,8 +134,35 @@ const PatientDetail = () => {
                   onClick={() => navigate('/AI-info')}
                 >
                   Learn more
+                  </Text>
                 </Text>
-              </Text>
+                {patient.weight_loss_pred !== undefined && (
+                <Box mt={8}>
+                  <Text mb={2}><strong>Expected Weight Loss After Surgery:</strong> {patient.weight_loss_pred}%</Text>
+                  <Box w="100%" h="20px" bg="gray.200" borderRadius="md" overflow="hidden">
+                    <Box
+                      h="100%"
+                      w={`${patient.weight_loss_pred}%`}
+                      bg={
+                        patient.weight_loss_pred >= 30
+                          ? 'green.400'
+                          : patient.weight_loss_pred >= 15
+                          ? 'orange.400'
+                          : 'red.500'
+                      }
+                      transition="width 0.5s ease-in-out"
+                    />
+                  </Box>
+                  <Text mt={2} fontSize="sm" color="gray.600">
+                    {patient.weight_loss_pred >= 30
+                      ? '✅ Strong expected improvement in patient weight.'
+                      : patient.weight_loss_pred >= 15
+                      ? '⚠️ Moderate weight loss predicted – encourage additional lifestyle change.'
+                      : '❗️Low predicted impact – consult clinical team for further action.'}
+                  </Text>
+                </Box>
+                )}
+
             </>
           ) : (
             <><Text mb={2}><strong>AI Risk Prediction For Bariatric Surgery:</strong> </Text><Text mt={2} fontSize="sm" color={patient.bmi < 25 ? "green.600" : "orange.600"}>

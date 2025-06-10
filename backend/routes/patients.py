@@ -54,6 +54,7 @@ def get_db():
 
 
 model = load("best_model_pipeline_R42.pkl")
+weight_loss_model = load("weight_loss_pipeline.pkl")
 
 @router.post("/add_patient")
 async def add_patient(
@@ -146,6 +147,20 @@ async def add_patient(
         model_input = model_input_df
         y_proba = model.predict_proba(model_input)[0, 1]
         risk_pred = round(float(y_proba) * 100, 2)  # scale to percentage
+
+        # NEW: Predict weight loss percentage using Lasso regression
+        weight_loss_features = [
+            "age", "height", "weight", "bmi", "family_hist_cnt", "chronic_meds_cnt",
+            "CM_AIDS", "CM_DEPRESS", "CM_DM", "CM_DMCX", "CM_HTN_C",
+            "CM_HYPOTHY", "CM_LIVER", "CM_OBESE", "CM_SMOKE", "CM_APNEA",
+            "CM_CHOLSTRL", "CM_OSTARTH", "CM_HPLD", "gender_Male",
+            "procedure_category_Mini gastric bypass (OAGB)", "procedure_category_RYGBP",
+            "procedure_category_SADI", "procedure_category_Sleeve",
+            "antibiotics_Augmentin", "antibiotics_Clindamycin", "antibiotics_Invanz", "antibiotics_Kefsol"
+        ]
+        weight_loss_model_input = model_input_df[weight_loss_features]
+        weight_loss_pred = float(weight_loss_model.predict(weight_loss_model_input)[0])
+        weight_loss_pred = round(weight_loss_pred, 2)
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
@@ -163,6 +178,7 @@ async def add_patient(
         fk_idDoctorInfo=doctor_id,
         bmi=bmi,
         risk_pred=risk_pred,
+        weight_loss_pred=weight_loss_pred,
         **data_dict
     )
 
@@ -170,7 +186,11 @@ async def add_patient(
     db.commit()
     db.refresh(new_patient)
 
-    return {"status": "success", "patient_id": new_patient.idPatientInfo}
+    return {
+        "status": "success",
+        "patient_id": new_patient.idPatientInfo,
+        "weight_loss_prediction": weight_loss_pred
+    }
 
 @router.get("/patient/{patient_id}")
 async def get_patient(
@@ -209,6 +229,7 @@ async def get_patient(
         "cholecystectomy_repair": convert_01_to_yesno(patient.cholecystectomy_repair),
         "hiatus_hernia_repair": convert_01_to_yesno(patient.hiatus_hernia_repair),
         "risk_pred": patient.risk_pred,
+        "weight_loss_pred": patient.weight_loss_pred,
         "patient_notes": patient.patient_notes,
         "CM_AIDS": patient.CM_AIDS,
         "CM_ANEMDEF": patient.CM_ANEMDEF,

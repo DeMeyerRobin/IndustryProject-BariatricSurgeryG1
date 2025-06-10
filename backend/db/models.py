@@ -28,6 +28,7 @@ class Patient(Base):
     cholecystectomy_repair = Column("CholecystectomyRepair", String)
     hiatus_hernia_repair = Column("HiatusHerniaRepair", String)
     risk_pred = Column("ModelRiskPred", Float)
+    weight_loss_pred = Column("WeightLossPred", Float)
     patient_notes = Column("PatientNotes", String)
     CM_AIDS = Column("CM_AIDS", Integer)
     CM_ANEMDEF = Column("CM_ANEMDEF", Integer)
