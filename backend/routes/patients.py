@@ -27,7 +27,6 @@ procedure_category_columns = [
 
 model_feature_order = [
     "age", "height", "weight", "bmi", "family_hist_cnt", "chronic_meds_cnt",
-    "cholecystectomy_repair", "hiatus_hernia_repair",
     "CM_AIDS", "CM_ANEMDEF", "CM_ARTH", "CM_CHF", "CM_DEPRESS", "CM_DM", "CM_DMCX", "CM_HTN_C",
     "CM_HYPOTHY", "CM_LIVER", "CM_OBESE", "CM_PSYCH", "CM_SMOKE", "CM_APNEA", "CM_CHOLSTRL",
     "CM_OSTARTH", "CM_HPLD", "gender_Male",
@@ -53,7 +52,7 @@ def get_db():
         db.close()
 
 
-model = load("best_model_pipeline_R42.pkl")
+model = load("SMOTE_logReg_risk_model.pkl")
 weight_loss_model = load("weight_loss_pipeline.pkl")
 
 @router.post("/add_patient")
@@ -67,10 +66,6 @@ async def add_patient(
         raise HTTPException(status_code=401, detail="Not logged in")
 
     data_dict = data.dict()
-
-    # Convert 'yes'/'no' to 1/0
-    data_dict["cholecystectomy_repair"] = convert_yes_no(data_dict["cholecystectomy_repair"])
-    data_dict["hiatus_hernia_repair"] = convert_yes_no(data_dict["hiatus_hernia_repair"])
 
     # Calculate BMI
     try:
@@ -121,8 +116,7 @@ async def add_patient(
 
         # Convert numeric fields safely
         numeric_fields = [
-            "age", "height", "weight", "family_hist_cnt", "chronic_meds_cnt",
-            "cholecystectomy_repair", "hiatus_hernia_repair"
+            "age", "height", "weight", "family_hist_cnt", "chronic_meds_cnt"
         ] + [cm for cm in model_input if cm.startswith("CM_")]
 
         for field in numeric_fields:
@@ -226,8 +220,6 @@ async def get_patient(
         "chronic_meds_cnt": patient.chronic_meds_cnt,
         "procedure_category": patient.procedure_category,
         "antibiotics": patient.antibiotics,
-        "cholecystectomy_repair": convert_01_to_yesno(patient.cholecystectomy_repair),
-        "hiatus_hernia_repair": convert_01_to_yesno(patient.hiatus_hernia_repair),
         "risk_pred": patient.risk_pred,
         "weight_loss_pred": patient.weight_loss_pred,
         "patient_notes": patient.patient_notes,
@@ -273,10 +265,6 @@ def update_patient(
 
     data_dict = data.dict()
 
-    # Convert 'yes'/'no' to 1/0
-    data_dict["cholecystectomy_repair"] = convert_yes_no(data_dict["cholecystectomy_repair"])
-    data_dict["hiatus_hernia_repair"] = convert_yes_no(data_dict["hiatus_hernia_repair"])
-
     # Calculate BMI
     try:
         height_m = copy(data_dict["height"]) / 100
@@ -320,7 +308,7 @@ def update_patient(
         # Safe numeric conversion
         numeric_fields = [
             "age", "height", "weight", "family_hist_cnt", "chronic_meds_cnt",
-            "cholecystectomy_repair", "hiatus_hernia_repair", "gender_Male"
+            "gender_Male"
         ] + [cm for cm in model_input if cm.startswith("CM_")]
 
         for field in numeric_fields:

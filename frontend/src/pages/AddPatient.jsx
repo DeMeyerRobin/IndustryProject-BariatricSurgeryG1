@@ -20,8 +20,6 @@ const AddPatient = () => {
   const [chronicMedsCnt, setChronicMedsCnt] = useState('');
   const [procedureCategory, setProcedureCategory] = useState('');
   const [antibiotics, setAntibiotics] = useState('');
-  const [cholecystectomyRepair, setCholecystectomyRepair] = useState('');
-  const [hiatusHerniaRepair, setHiatusHerniaRepair] = useState('');
   const [nameError, setNameError] = useState('');
   const [patientNotes, setPatientNotes] = useState('');
   const [comorbidities, setComorbidities] = useState([]);
@@ -86,8 +84,6 @@ const AddPatient = () => {
         chronic_meds_cnt: parseOrZero(chronicMedsCnt),
         procedure_category: procedureCategory,
         antibiotics,
-        cholecystectomy_repair: cholecystectomyRepair,
-        hiatus_hernia_repair: hiatusHerniaRepair,
         patient_notes: patientNotes,
         ...cmValues
       };
@@ -157,7 +153,7 @@ const AddPatient = () => {
   };
 
   const buttonStyle = {
-    backgroundColor: '#3182CE',
+    backgroundColor: '#2e65df',
     color: 'white',
     padding: '10px 20px',
     border: 'none',
@@ -238,24 +234,6 @@ const AddPatient = () => {
             <option value="Rocephin">Rocephin</option>
           </select>
         </div>
-
-        {[
-          { label: "Cholecystectomy repair?", value: cholecystectomyRepair, setter: setCholecystectomyRepair },
-          { label: "Hiatus hernia repair?", value: hiatusHerniaRepair, setter: setHiatusHerniaRepair },
-        ].map(({ label, value, setter }, idx) => (
-          <div key={idx} style={fieldStyle}>
-            <label style={labelStyle}>{label}</label>
-            <select
-              style={inputStyle}
-              value={value}
-              onChange={(e) => setter(e.target.value)}
-            >
-              <option value="">n/a</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </div>
-        ))}
 
         <div style={fieldStyle}>
           <label style={labelStyle}>What is the patient's gender?</label>

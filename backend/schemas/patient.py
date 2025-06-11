@@ -10,8 +10,6 @@ class PatientCreate(BaseModel):
     chronic_meds_cnt: int
     procedure_category: str
     antibiotics: str
-    cholecystectomy_repair: str
-    hiatus_hernia_repair: str
     patient_notes: str
     CM_AIDS: int
     CM_ANEMDEF: int

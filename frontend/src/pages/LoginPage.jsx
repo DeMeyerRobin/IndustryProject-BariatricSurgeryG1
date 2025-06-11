@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import logo from '../assets/OCF Logo - Transparent Background.png';
 import {
   Box,
   Button,
@@ -62,6 +63,9 @@ const LoginPage = () => {
   return (
     <Box bg="gray.50" minH="100vh" display="flex" alignItems="center" justifyContent="center">
       <Box bg="white" p={8} rounded="xl" shadow="md" w="100%" maxW="md">
+      <Box mb={4} textAlign="center">
+        <img src={logo} alt="Logo" style={{ height: '120px', display: 'block', margin: '0 auto' }} />
+      </Box>
         <Heading size="lg" textAlign="center" mb={6}>Doctor Login</Heading>
         <form onSubmit={handleLogin}>
           <VStack spacing={4}>
@@ -88,7 +92,7 @@ const LoginPage = () => {
                 {error}
               </Text>
             )}
-            <Button colorScheme="blue" type="submit" width="full">
+            <Button bg="#2e65df" color="white" _hover={{ bg: "#ac3df3" }} type="submit" width="full">
               Login
             </Button>
             <Text fontSize="sm" color="gray.600">

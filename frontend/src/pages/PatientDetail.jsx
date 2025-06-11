@@ -71,8 +71,6 @@ const PatientDetail = () => {
         <Box mb={3}><Text><strong>Chronic Meds Count:</strong> {patient.chronic_meds_cnt}</Text></Box>
         <Box mb={3}><Text><strong>Procedure Category:</strong> {patient.procedure_category}</Text></Box>
         <Box mb={3}><Text><strong>Antibiotics:</strong> {patient.antibiotics}</Text></Box>
-        <Box mb={3}><Text><strong>Cholecystectomy Repair:</strong> {patient.cholecystectomy_repair}</Text></Box>
-        <Box mb={3}><Text><strong>Hiatus Hernia Repair:</strong> {patient.hiatus_hernia_repair}</Text></Box>
         <Box mb={6}>
         <Heading size="md" mb={3}>Comorbidities</Heading>
         {cmOptions
@@ -184,7 +182,7 @@ const PatientDetail = () => {
         </Box>
 
         <Box display="flex" gap={3} mt={6}>
-          <Button onClick={() => navigate('/dashboard')} colorScheme="blue">
+          <Button bg="#2e65df" color="white" _hover={{ bg: "#ac3df3" }} onClick={() => navigate('/dashboard')} colorScheme="blue">
             Back to Dashboard
           </Button>
           <Button
@@ -197,9 +195,9 @@ const PatientDetail = () => {
             Edit File
           </Button>
           <Button
-            bg="red.500"
+            bg="#eb166d"
             color="white"
-            _hover={{ bg: "red.600" }}
+            _hover={{ bg: "red.500" }}
             _active={{ bg: "red.700" }}
             onClick={() => {
               if (window.confirm("Are you sure you want to delete this patient?")) {

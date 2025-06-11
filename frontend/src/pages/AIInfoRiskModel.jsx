@@ -72,8 +72,8 @@ const AIInfoRiskModel = () => {
             </Text>
         </Box>
 
-        <Button onClick={() => navigate('/dashboard')} colorScheme="blue">
-          Back to Dashboard
+        <Button bg="#2e65df" color="white" _hover={{ bg: "#ac3df3" }} onClick={() => navigate(-1)} colorScheme="blue">
+          Go Back
         </Button>
       </Box>
     </Box>
