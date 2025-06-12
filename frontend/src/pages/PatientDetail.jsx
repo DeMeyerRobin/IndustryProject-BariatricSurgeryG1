@@ -36,6 +36,7 @@ const PatientDetail = () => {
             })
             .then(data => {
               setPatient(data);
+              console.log(data);
               setLoading(false);
             })
             .catch(err => {
@@ -70,8 +71,6 @@ const PatientDetail = () => {
         <Box mb={3}><Text><strong>Chronic Meds Count:</strong> {patient.chronic_meds_cnt}</Text></Box>
         <Box mb={3}><Text><strong>Procedure Category:</strong> {patient.procedure_category}</Text></Box>
         <Box mb={3}><Text><strong>Antibiotics:</strong> {patient.antibiotics}</Text></Box>
-        <Box mb={3}><Text><strong>Cholecystectomy Repair:</strong> {patient.cholecystectomy_repair}</Text></Box>
-        <Box mb={3}><Text><strong>Hiatus Hernia Repair:</strong> {patient.hiatus_hernia_repair}</Text></Box>
         <Box mb={6}>
         <Heading size="md" mb={3}>Comorbidities</Heading>
         {cmOptions
@@ -130,11 +129,47 @@ const PatientDetail = () => {
                   color="blue.500"
                   textDecoration="underline"
                   cursor="pointer"
-                  onClick={() => navigate('/AI-info')}
+                  onClick={() => navigate('/AI-info/risk-model')}
                 >
                   Learn more
+                  </Text>
                 </Text>
-              </Text>
+                {patient.weight_loss_pred !== undefined && patient.weight_loss_pred !== null && patient.weight_loss_pred !== "" && (
+                <Box mt={8}>
+                  <Text mb={2}><strong>Expected Weight Loss After Surgery:</strong> {patient.weight_loss_pred}%</Text>
+                  <Box w="100%" h="20px" bg="gray.200" borderRadius="md" overflow="hidden">
+                    <Box
+                      h="100%"
+                      w={`${patient.weight_loss_pred}%`}
+                      bg={
+                        patient.weight_loss_pred >= 30
+                          ? 'green.400'
+                          : patient.weight_loss_pred >= 15
+                          ? 'orange.400'
+                          : 'red.500'
+                      }
+                      transition="width 0.5s ease-in-out"
+                    />
+                  </Box>
+                  <Text mt={2} fontSize="sm" color="gray.700">
+                    If successful, the patient's future weight may be approximately{" "}
+                    <strong>{(patient.weight - (patient.weight * (patient.weight_loss_pred / 100))).toFixed(1)} kg</strong>.
+                  </Text>
+                  <Text mt={3} fontSize="sm" color="gray.500">
+                    This model predicts weight loss with an average error of around 7%.{" "}
+                    <Text
+                      as="span"
+                      color="blue.500"
+                      textDecoration="underline"
+                      cursor="pointer"
+                      onClick={() => navigate('/AI-info/weight-loss-model')}
+                    >
+                      Learn more
+                      </Text>
+                    </Text>
+                </Box>
+                )}
+
             </>
           ) : (
             <><Text mb={2}><strong>AI Risk Prediction For Bariatric Surgery:</strong> </Text><Text mt={2} fontSize="sm" color={patient.bmi < 25 ? "green.600" : "orange.600"}>
@@ -147,7 +182,7 @@ const PatientDetail = () => {
         </Box>
 
         <Box display="flex" gap={3} mt={6}>
-          <Button onClick={() => navigate('/dashboard')} colorScheme="blue">
+          <Button bg="#2e65df" color="white" _hover={{ bg: "#ac3df3" }} onClick={() => navigate('/dashboard')} colorScheme="blue">
             Back to Dashboard
           </Button>
           <Button
@@ -160,9 +195,9 @@ const PatientDetail = () => {
             Edit File
           </Button>
           <Button
-            bg="red.500"
+            bg="#eb166d"
             color="white"
-            _hover={{ bg: "red.600" }}
+            _hover={{ bg: "red.500" }}
             _active={{ bg: "red.700" }}
             onClick={() => {
               if (window.confirm("Are you sure you want to delete this patient?")) {

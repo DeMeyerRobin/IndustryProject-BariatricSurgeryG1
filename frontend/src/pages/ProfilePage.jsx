@@ -11,7 +11,7 @@ import {
     Flex,
     Button,
 } from '@chakra-ui/react';
-import logo from '../assets/Logo.png';
+import logo from '../assets/OCF Logo - Transparent Background.png';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
