@@ -234,7 +234,7 @@ async def get_patient(
     # Ensure correct order
     patient_df = pd.DataFrame([[patient_input[feat] for feat in model_feature_order]], columns=model_feature_order)
 
-    saved_shap_plot_path = routes.SHAPExplainer.save_shap_plot(pipeline=model, input_vector=patient_df.iloc[0], patient_id=patient.idPatientInfo)
+    saved_shap_plot_path = routes.SHAPExplainer.save_shap_plot_positive_only(pipeline=model, input_vector=patient_df.iloc[0], patient_id=patient.idPatientInfo)
 
     final = {
         "id": patient.idPatientInfo,
