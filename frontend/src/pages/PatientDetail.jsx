@@ -1,7 +1,7 @@
 // src/pages/PatientDetail.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Heading, Text, Spinner, Button } from '@chakra-ui/react';
+import { Box, Heading, Text, Spinner, Button, Flex } from '@chakra-ui/react';
 
 const cmOptions = [
   'CM_AIDS', 'CM_ANEMDEF', 'CM_ARTH', 'CM_CHF', 'CM_DEPRESS',
@@ -225,6 +225,21 @@ const PatientDetail = () => {
           </Button>
         </Box>
       </Box>
+      {patient.saved_shap_plot_path && (
+      <Flex mt={10} direction="column" align="center" justify="center">
+        <Heading size="md" mb={3}>AI Explainability (SHAP)</Heading>
+        <img
+          src={`http://localhost:8000/${patient.saved_shap_plot_path}`}
+          alt="SHAP Explanation"
+          style={{
+            maxWidth: '100%',
+            maxHeight: '600px',
+            borderRadius: '8px',
+            border: '1px solid #ccc'
+          }}
+        />
+      </Flex>
+    )}
     </Box>
   );
 };

@@ -4,6 +4,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes import doctors, patients
 from dotenv import load_dotenv
 import os
+from fastapi.staticfiles import StaticFiles
+
+
 
 load_dotenv()
 app = FastAPI()
@@ -20,6 +23,9 @@ app.add_middleware(
 
 app.include_router(doctors.router)
 app.include_router(patients.router)
+
+
+app.mount("/shap_plots", StaticFiles(directory="shap_plots"), name="shap_plots")
 
 @app.get("/")
 def root():

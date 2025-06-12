@@ -7,6 +7,7 @@ from db.database import SessionLocal
 from db.models import Patient
 from schemas.patient import PatientCreate
 from fastapi import Path
+import routes.SHAPExplainer
 
 router = APIRouter()
 
@@ -205,9 +206,36 @@ async def get_patient(
     if not patient:
         raise HTTPException(status_code=404, detail="Patient not found or access denied")
 
-    def convert_01_to_yesno(value: int) -> str:
-        return "yes" if value == 1 else "no"
-    
+    # === Step 1: Build base model input ===
+    patient_input = {
+        "age": patient.age,
+        "bmi": patient.bmi,
+        "family_hist_cnt": patient.family_hist_cnt,
+        "chronic_meds_cnt": patient.chronic_meds_cnt,
+        "CM_DM": patient.CM_DM,
+        "CM_DMCX": patient.CM_DMCX,
+        "CM_HTN_C": patient.CM_HTN_C,
+        "CM_LIVER": patient.CM_LIVER,
+        "CM_OBESE": patient.CM_OBESE,
+        "CM_APNEA": patient.CM_APNEA,
+        "CM_CHOLSTRL": patient.CM_CHOLSTRL,
+        "CM_OSTARTH": patient.CM_OSTARTH,
+        "CM_HPLD": patient.CM_HPLD,
+        "gender_Male": 1 if patient.gender.lower() == "male" else 0,
+        f"procedure_category_{patient.procedure_category}": 1,
+        f"antibiotics_{patient.antibiotics}": 1
+    }
+
+    # Add any missing fields with 0
+    for feature in model_feature_order:
+        if feature not in patient_input:
+            patient_input[feature] = 0
+
+    # Ensure correct order
+    patient_df = pd.DataFrame([[patient_input[feat] for feat in model_feature_order]], columns=model_feature_order)
+
+    saved_shap_plot_path = routes.SHAPExplainer.save_shap_plot(pipeline=model, input_vector=patient_df.iloc[0], patient_id=patient.idPatientInfo)
+
     final = {
         "id": patient.idPatientInfo,
         "name": patient.name,
@@ -231,7 +259,8 @@ async def get_patient(
         "CM_APNEA": patient.CM_APNEA,
         "CM_CHOLSTRL": patient.CM_CHOLSTRL,
         "CM_OSTARTH": patient.CM_OSTARTH,
-        "CM_HPLD": patient.CM_HPLD
+        "CM_HPLD": patient.CM_HPLD,
+        "saved_shap_plot_path": saved_shap_plot_path
     }
 
     return final
