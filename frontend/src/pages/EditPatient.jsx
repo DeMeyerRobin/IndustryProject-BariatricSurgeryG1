@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const cmOptions = [
-  'CM_AIDS', 'CM_ANEMDEF', 'CM_ARTH', 'CM_CHF', 'CM_DEPRESS',
-  'CM_DM', 'CM_DMCX', 'CM_HTN_C', 'CM_HYPOTHY', 'CM_LIVER',
-  'CM_OBESE', 'CM_PSYCH', 'CM_SMOKE', 'CM_APNEA', 'CM_CHOLSTRL',
+  'CM_DM', 'CM_DMCX', 'CM_HTN_C', 'CM_LIVER',
+  'CM_OBESE', 'CM_APNEA', 'CM_CHOLSTRL',
   'CM_OSTARTH', 'CM_HPLD'
 ];
 
@@ -54,10 +53,6 @@ const EditPatient = () => {
       id,
       ...cleanedPatient
     } = patient;
-  
-    // Set default 'no' for missing optional fields
-    cleanedPatient.cholecystectomy_repair = cleanedPatient.cholecystectomy_repair || 'no';
-    cleanedPatient.hiatus_hernia_repair = cleanedPatient.hiatus_hernia_repair || 'no';
   
     // Reset all comorbidities to 0
     cmOptions.forEach(key => cleanedPatient[key] = 0);
@@ -201,24 +196,6 @@ const EditPatient = () => {
           </select>
         </div>
 
-        {[
-          { label: 'Cholecystectomy Repair', field: 'cholecystectomy_repair' },
-          { label: 'Hiatus Hernia Repair', field: 'hiatus_hernia_repair' },
-        ].map(({ label, field }) => (
-          <div key={field} style={fieldStyle}>
-            <label style={labelStyle}>{label}</label>
-            <select
-              style={inputStyle}
-              value={patient[field]}
-              onChange={(e) => handleChange(field, e.target.value)}
-            >
-              <option value="">n/a</option>
-              {yesNoOptions.map(opt => (
-                <option key={opt} value={opt}>{opt.charAt(0).toUpperCase() + opt.slice(1)}</option>
-              ))}
-            </select>
-          </div>
-        ))}
         <div style={{ marginTop: '24px' }}>
           <h3 style={{ fontSize: '20px', fontWeight: 'bold' }}>Comorbidities</h3>
           {comorbidities.map((cm, index) => (

@@ -26,10 +26,9 @@ procedure_category_columns = [
 ]
 
 model_feature_order = [
-    "age", "height", "weight", "bmi", "family_hist_cnt", "chronic_meds_cnt",
-    "cholecystectomy_repair", "hiatus_hernia_repair",
-    "CM_AIDS", "CM_ANEMDEF", "CM_ARTH", "CM_CHF", "CM_DEPRESS", "CM_DM", "CM_DMCX", "CM_HTN_C",
-    "CM_HYPOTHY", "CM_LIVER", "CM_OBESE", "CM_PSYCH", "CM_SMOKE", "CM_APNEA", "CM_CHOLSTRL",
+    "age", "bmi", "family_hist_cnt", "chronic_meds_cnt",
+    "CM_DM", "CM_DMCX", "CM_HTN_C",
+    "CM_LIVER", "CM_OBESE", "CM_APNEA", "CM_CHOLSTRL",
     "CM_OSTARTH", "CM_HPLD", "gender_Male",
     "procedure_category_BPD -DS", "procedure_category_Mini gastric bypass (OAGB)",
     "procedure_category_RYGBP", "procedure_category_SADI", "procedure_category_Sleeve",
@@ -53,7 +52,8 @@ def get_db():
         db.close()
 
 
-model = load("best_model_pipeline_R42.pkl")
+model = load("SMOTE_logReg_risk_model.pkl")
+weight_loss_model = load("weight_loss_pipeline.pkl")
 
 @router.post("/add_patient")
 async def add_patient(
@@ -66,10 +66,6 @@ async def add_patient(
         raise HTTPException(status_code=401, detail="Not logged in")
 
     data_dict = data.dict()
-
-    # Convert 'yes'/'no' to 1/0
-    data_dict["cholecystectomy_repair"] = convert_yes_no(data_dict["cholecystectomy_repair"])
-    data_dict["hiatus_hernia_repair"] = convert_yes_no(data_dict["hiatus_hernia_repair"])
 
     # Calculate BMI
     try:
@@ -120,8 +116,7 @@ async def add_patient(
 
         # Convert numeric fields safely
         numeric_fields = [
-            "age", "height", "weight", "family_hist_cnt", "chronic_meds_cnt",
-            "cholecystectomy_repair", "hiatus_hernia_repair"
+            "age", "height", "weight", "family_hist_cnt", "chronic_meds_cnt"
         ] + [cm for cm in model_input if cm.startswith("CM_")]
 
         for field in numeric_fields:
@@ -146,6 +141,20 @@ async def add_patient(
         model_input = model_input_df
         y_proba = model.predict_proba(model_input)[0, 1]
         risk_pred = round(float(y_proba) * 100, 2)  # scale to percentage
+
+        # NEW: Predict weight loss percentage using Lasso regression
+        weight_loss_features = [
+            "age", "bmi", "family_hist_cnt", "chronic_meds_cnt",
+            "CM_DM", "CM_DMCX", "CM_HTN_C",
+            "CM_LIVER", "CM_OBESE", "CM_APNEA",
+            "CM_CHOLSTRL", "CM_OSTARTH", "CM_HPLD", "gender_Male",
+            "procedure_category_Mini gastric bypass (OAGB)", "procedure_category_RYGBP",
+            "procedure_category_SADI", "procedure_category_Sleeve",
+            "antibiotics_Augmentin", "antibiotics_Clindamycin", "antibiotics_Invanz", "antibiotics_Kefsol"
+        ]
+        weight_loss_model_input = model_input_df[weight_loss_features]
+        weight_loss_pred = float(weight_loss_model.predict(weight_loss_model_input)[0])
+        weight_loss_pred = round(weight_loss_pred, 2)
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
@@ -163,6 +172,7 @@ async def add_patient(
         fk_idDoctorInfo=doctor_id,
         bmi=bmi,
         risk_pred=risk_pred,
+        weight_loss_pred=weight_loss_pred,
         **data_dict
     )
 
@@ -170,7 +180,11 @@ async def add_patient(
     db.commit()
     db.refresh(new_patient)
 
-    return {"status": "success", "patient_id": new_patient.idPatientInfo}
+    return {
+        "status": "success",
+        "patient_id": new_patient.idPatientInfo,
+        "weight_loss_prediction": weight_loss_pred
+    }
 
 @router.get("/patient/{patient_id}")
 async def get_patient(
@@ -206,23 +220,14 @@ async def get_patient(
         "chronic_meds_cnt": patient.chronic_meds_cnt,
         "procedure_category": patient.procedure_category,
         "antibiotics": patient.antibiotics,
-        "cholecystectomy_repair": convert_01_to_yesno(patient.cholecystectomy_repair),
-        "hiatus_hernia_repair": convert_01_to_yesno(patient.hiatus_hernia_repair),
         "risk_pred": patient.risk_pred,
+        "weight_loss_pred": patient.weight_loss_pred,
         "patient_notes": patient.patient_notes,
-        "CM_AIDS": patient.CM_AIDS,
-        "CM_ANEMDEF": patient.CM_ANEMDEF,
-        "CM_ARTH": patient.CM_ARTH,
-        "CM_CHF": patient.CM_CHF,
-        "CM_DEPRESS": patient.CM_DEPRESS,
         "CM_DM": patient.CM_DM,
         "CM_DMCX": patient.CM_DMCX,
         "CM_HTN_C": patient.CM_HTN_C,
-        "CM_HYPOTHY": patient.CM_HYPOTHY,
         "CM_LIVER": patient.CM_LIVER,
         "CM_OBESE": patient.CM_OBESE,
-        "CM_PSYCH": patient.CM_PSYCH,
-        "CM_SMOKE": patient.CM_SMOKE,
         "CM_APNEA": patient.CM_APNEA,
         "CM_CHOLSTRL": patient.CM_CHOLSTRL,
         "CM_OSTARTH": patient.CM_OSTARTH,
@@ -251,10 +256,6 @@ def update_patient(
         raise HTTPException(status_code=404, detail="Patient not found")
 
     data_dict = data.dict()
-
-    # Convert 'yes'/'no' to 1/0
-    data_dict["cholecystectomy_repair"] = convert_yes_no(data_dict["cholecystectomy_repair"])
-    data_dict["hiatus_hernia_repair"] = convert_yes_no(data_dict["hiatus_hernia_repair"])
 
     # Calculate BMI
     try:
@@ -298,8 +299,8 @@ def update_patient(
 
         # Safe numeric conversion
         numeric_fields = [
-            "age", "height", "weight", "family_hist_cnt", "chronic_meds_cnt",
-            "cholecystectomy_repair", "hiatus_hernia_repair", "gender_Male"
+            "age", "family_hist_cnt", "chronic_meds_cnt",
+            "gender_Male"
         ] + [cm for cm in model_input if cm.startswith("CM_")]
 
         for field in numeric_fields:
@@ -323,6 +324,21 @@ def update_patient(
         model_input_df = pd.DataFrame([[model_input[col] for col in model_feature_order]], columns=model_feature_order)
         y_proba = model.predict_proba(model_input_df)[0, 1]
         risk_pred = round(float(y_proba) * 100, 2)
+
+        # NEW: Predict weight loss percentage using Lasso regression
+        print("WE MADE IT THIS FAR")
+        weight_loss_features = [
+            "age", "bmi", "family_hist_cnt", "chronic_meds_cnt",
+            "CM_DM", "CM_DMCX", "CM_HTN_C",
+            "CM_LIVER", "CM_OBESE", "CM_APNEA",
+            "CM_CHOLSTRL", "CM_OSTARTH", "CM_HPLD", "gender_Male",
+            "procedure_category_Mini gastric bypass (OAGB)", "procedure_category_RYGBP",
+            "procedure_category_SADI", "procedure_category_Sleeve",
+            "antibiotics_Augmentin", "antibiotics_Clindamycin", "antibiotics_Invanz", "antibiotics_Kefsol"
+        ]
+        weight_loss_model_input = model_input_df[weight_loss_features]
+        weight_loss_pred = float(weight_loss_model.predict(weight_loss_model_input)[0])
+        weight_loss_pred = round(weight_loss_pred, 2)
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
@@ -342,6 +358,7 @@ def update_patient(
 
     patient.bmi = bmi
     patient.risk_pred = risk_pred
+    patient.weight_loss_pred = weight_loss_pred
     if patient.patient_notes is None:
         patient.patient_notes = ""
 

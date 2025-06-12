@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../assets/Logo.png';
+import logo from '../assets/OCF Logo - Transparent Background.png';
 import {
   Box,
   Heading,
@@ -127,7 +127,7 @@ const MainPage = () => {
             <option value="age_asc">Sort by Age (Youngest)</option>
             <option value="age_desc">Sort by Age (Oldest)</option>
           </select>
-          <Button colorScheme="blue" onClick={() => navigate('/AddPatient')}>
+          <Button bg="#2e65df" color="white" _hover={{ bg: "#ac3df3" }} type="submit" onClick={() => navigate('/AddPatient')}>
             Add New Patient
           </Button>
         </Box>
@@ -158,7 +158,7 @@ const MainPage = () => {
                 <button
                   onClick={() => navigate(`/patient/${patient.idPatientInfo}`)}
                   style={{
-                    background: '#3182CE',
+                    background: '#fcb035',
                     color: 'white',
                     border: 'none',
                     padding: '8px 12px',
