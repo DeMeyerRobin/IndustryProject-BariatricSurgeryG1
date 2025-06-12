@@ -4,9 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 const cmOptions = [
-  'CM_AIDS', 'CM_ANEMDEF', 'CM_ARTH', 'CM_CHF', 'CM_DEPRESS',
-  'CM_DM', 'CM_DMCX', 'CM_HTN_C', 'CM_HYPOTHY', 'CM_LIVER',
-  'CM_OBESE', 'CM_PSYCH', 'CM_SMOKE', 'CM_APNEA', 'CM_CHOLSTRL',
+  'CM_DM', 'CM_DMCX', 'CM_HTN_C', 'CM_LIVER',
+  'CM_OBESE', 'CM_APNEA', 'CM_CHOLSTRL',
   'CM_OSTARTH', 'CM_HPLD'
 ];
 

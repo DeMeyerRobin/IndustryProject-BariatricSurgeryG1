@@ -26,9 +26,9 @@ procedure_category_columns = [
 ]
 
 model_feature_order = [
-    "age", "height", "weight", "bmi", "family_hist_cnt", "chronic_meds_cnt",
-    "CM_AIDS", "CM_ANEMDEF", "CM_ARTH", "CM_CHF", "CM_DEPRESS", "CM_DM", "CM_DMCX", "CM_HTN_C",
-    "CM_HYPOTHY", "CM_LIVER", "CM_OBESE", "CM_PSYCH", "CM_SMOKE", "CM_APNEA", "CM_CHOLSTRL",
+    "age", "bmi", "family_hist_cnt", "chronic_meds_cnt",
+    "CM_DM", "CM_DMCX", "CM_HTN_C",
+    "CM_LIVER", "CM_OBESE", "CM_APNEA", "CM_CHOLSTRL",
     "CM_OSTARTH", "CM_HPLD", "gender_Male",
     "procedure_category_BPD -DS", "procedure_category_Mini gastric bypass (OAGB)",
     "procedure_category_RYGBP", "procedure_category_SADI", "procedure_category_Sleeve",
@@ -144,9 +144,9 @@ async def add_patient(
 
         # NEW: Predict weight loss percentage using Lasso regression
         weight_loss_features = [
-            "age", "height", "weight", "bmi", "family_hist_cnt", "chronic_meds_cnt",
-            "CM_AIDS", "CM_DEPRESS", "CM_DM", "CM_DMCX", "CM_HTN_C",
-            "CM_HYPOTHY", "CM_LIVER", "CM_OBESE", "CM_SMOKE", "CM_APNEA",
+            "age", "bmi", "family_hist_cnt", "chronic_meds_cnt",
+            "CM_DM", "CM_DMCX", "CM_HTN_C",
+            "CM_LIVER", "CM_OBESE", "CM_APNEA",
             "CM_CHOLSTRL", "CM_OSTARTH", "CM_HPLD", "gender_Male",
             "procedure_category_Mini gastric bypass (OAGB)", "procedure_category_RYGBP",
             "procedure_category_SADI", "procedure_category_Sleeve",
@@ -223,19 +223,11 @@ async def get_patient(
         "risk_pred": patient.risk_pred,
         "weight_loss_pred": patient.weight_loss_pred,
         "patient_notes": patient.patient_notes,
-        "CM_AIDS": patient.CM_AIDS,
-        "CM_ANEMDEF": patient.CM_ANEMDEF,
-        "CM_ARTH": patient.CM_ARTH,
-        "CM_CHF": patient.CM_CHF,
-        "CM_DEPRESS": patient.CM_DEPRESS,
         "CM_DM": patient.CM_DM,
         "CM_DMCX": patient.CM_DMCX,
         "CM_HTN_C": patient.CM_HTN_C,
-        "CM_HYPOTHY": patient.CM_HYPOTHY,
         "CM_LIVER": patient.CM_LIVER,
         "CM_OBESE": patient.CM_OBESE,
-        "CM_PSYCH": patient.CM_PSYCH,
-        "CM_SMOKE": patient.CM_SMOKE,
         "CM_APNEA": patient.CM_APNEA,
         "CM_CHOLSTRL": patient.CM_CHOLSTRL,
         "CM_OSTARTH": patient.CM_OSTARTH,
@@ -307,7 +299,7 @@ def update_patient(
 
         # Safe numeric conversion
         numeric_fields = [
-            "age", "height", "weight", "family_hist_cnt", "chronic_meds_cnt",
+            "age", "family_hist_cnt", "chronic_meds_cnt",
             "gender_Male"
         ] + [cm for cm in model_input if cm.startswith("CM_")]
 
@@ -334,10 +326,11 @@ def update_patient(
         risk_pred = round(float(y_proba) * 100, 2)
 
         # NEW: Predict weight loss percentage using Lasso regression
+        print("WE MADE IT THIS FAR")
         weight_loss_features = [
-            "age", "height", "weight", "bmi", "family_hist_cnt", "chronic_meds_cnt",
-            "CM_AIDS", "CM_DEPRESS", "CM_DM", "CM_DMCX", "CM_HTN_C",
-            "CM_HYPOTHY", "CM_LIVER", "CM_OBESE", "CM_SMOKE", "CM_APNEA",
+            "age", "bmi", "family_hist_cnt", "chronic_meds_cnt",
+            "CM_DM", "CM_DMCX", "CM_HTN_C",
+            "CM_LIVER", "CM_OBESE", "CM_APNEA",
             "CM_CHOLSTRL", "CM_OSTARTH", "CM_HPLD", "gender_Male",
             "procedure_category_Mini gastric bypass (OAGB)", "procedure_category_RYGBP",
             "procedure_category_SADI", "procedure_category_Sleeve",

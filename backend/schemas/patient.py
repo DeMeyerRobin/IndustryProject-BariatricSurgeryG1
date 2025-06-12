@@ -11,19 +11,11 @@ class PatientCreate(BaseModel):
     procedure_category: str
     antibiotics: str
     patient_notes: str
-    CM_AIDS: int
-    CM_ANEMDEF: int
-    CM_ARTH: int
-    CM_CHF: int
-    CM_DEPRESS: int
     CM_DM: int
     CM_DMCX: int
     CM_HTN_C: int
-    CM_HYPOTHY: int
     CM_LIVER: int
     CM_OBESE: int
-    CM_PSYCH: int
-    CM_SMOKE: int
     CM_APNEA: int
     CM_CHOLSTRL: int
     CM_OSTARTH: int
