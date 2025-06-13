@@ -9,6 +9,7 @@ import EditPatient from './pages/EditPatient';
 import ProfilePage from './pages/ProfilePage';
 import AIInfoRiskModel from './pages/AIInfoRiskModel';
 import AIInfoWeightLossModel from './pages/AIInfoWeightLossModel';
+import AIExplanation from './pages/AIExplanation';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/AI-info/risk-model" element={<AIInfoRiskModel />} />
         <Route path="/AI-info/weight-loss-model" element={<AIInfoWeightLossModel />} />
+        <Route path="/explanation/:patient_id" element={<AIExplanation />} />
       </Routes>
     </Router>
   );

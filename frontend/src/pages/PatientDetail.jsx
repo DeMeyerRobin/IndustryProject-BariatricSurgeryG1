@@ -114,7 +114,17 @@ const PatientDetail = () => {
 
           {(patient.bmi >= 25 || patient.risk_pred > 10) && patient.age > 0 && patient.height > 0 && patient.weight > 0 ? (
             <>
-              <Text mb={2}><strong>AI Risk Prediction For Bariatric Surgery:</strong> {patient.risk_pred}%</Text>
+              <Text mb={2}><strong>AI Risk Prediction For Bariatric Surgery:</strong> {patient.risk_pred}%  | 
+              <Text
+                as="span"
+                color="blue.500"
+                textDecoration="underline"
+                cursor="pointer"
+                onClick={() => navigate(`/explanation/${patient.id}`)}
+              >
+                Explain
+                </Text>
+                </Text>
               <Box w="100%" h="20px" bg="gray.200" borderRadius="md" overflow="hidden">
                 <Box
                   h="100%"
@@ -133,11 +143,12 @@ const PatientDetail = () => {
               <Text mt={2} fontSize="sm" color="gray.600">
                 {
                   patient.risk_pred < 10
-                    ? 'Mild Risk – Likely a good candidate for surgery.'
+                    ? 'Mild Risk - Likely a good candidate for surgery.'
                     : patient.risk_pred < 40
-                    ? 'Moderate Risk – Caution advised; additional assessment recommended.'
-                    : 'High Risk – Bariatric surgery may not be advisable without further evaluation.'
+                    ? 'Moderate Risk - Caution advised; additional assessment recommended.'
+                    : 'High Risk - Bariatric surgery may not be advisable without further evaluation.'
                 }
+                {" "}
               </Text>
               <Text mt={3} fontSize="sm" color="gray.500">
                 This AI model is approximately 70% accurate.{" "}
@@ -242,63 +253,6 @@ const PatientDetail = () => {
           </Button>
         </Box>
       </Box>
-      {(patient.bmi >= 25 || patient.risk_pred > 10) &&
-        patient.age > 0 && patient.height > 0 && patient.weight > 0 &&
-        patient.saved_shap_positive_plot_path && (
-          <Flex mt={10} direction="column" align="center" justify="center">
-            <Heading size="md" mb={3}>AI Explainability (SHAP)</Heading>
-            <Heading size="sm" mt={6} mb={2}>Top Risk-Increasing Factors</Heading>
-            <img
-              src={`http://localhost:8000/${patient.saved_shap_positive_plot_path}`}
-              alt="SHAP Positive Explanation"
-              style={{
-                maxWidth: '100%',
-                maxHeight: '600px',
-                borderRadius: '8px',
-                border: '1px solid #ccc'
-              }}
-            />
-            {patient.feature_impact_positive.slice(0, 3).map(([feature, value], index) => (
-              <Text key={index} fontSize="sm" color="gray.700">
-                <strong>{feature}</strong> increases the risk  {value.toFixed(2)}%.
-              </Text>
-            ))}
-            <Text fontSize="sm" color="gray.600" mt={4}>
-              These factors each <strong>increase</strong> the predicted risk.
-              Note that this does not directly add up to the final risk percentage
-              because some features may have reduced the risk.
-              SHAP values explain how each feature <em>shifts</em> the AI's prediction
-              relative to the baseline.
-            </Text>
-          </Flex>
-        )}
-
-        {(patient.bmi >= 25 || patient.risk_pred > 10) &&
-        patient.age > 0 && patient.height > 0 && patient.weight > 0 &&
-        patient.saved_shap_negative_plot_path && (
-          <Flex mt={14} direction="column" align="center" justify="center">
-            <Heading size="sm" mb={2}>Top Risk-Reducing Factors</Heading>
-            <img
-              src={`http://localhost:8000/${patient.saved_shap_negative_plot_path}`}
-              alt="SHAP Negative Explanation"
-              style={{
-                maxWidth: '100%',
-                maxHeight: '600px',
-                borderRadius: '8px',
-                border: '1px solid #ccc'
-              }}
-            />
-            {patient.feature_impact_negative.slice(0, 3).map(([feature, value], index) => (
-              <Text key={index} fontSize="sm" color="gray.700">
-                <strong>{feature}</strong> helped reduce the predicted risk by approximately {Math.abs(value).toFixed(2)}%.
-              </Text>
-            ))}
-            <Text fontSize="sm" color="gray.600" mt={4}>
-              These factors <strong>reduced</strong> the predicted risk, helping balance out high-risk contributors.
-              SHAP values explain how each feature <em>lowers</em> the AI’s prediction relative to the baseline.
-            </Text>
-          </Flex>
-        )}
     </Box>
   );
 };
