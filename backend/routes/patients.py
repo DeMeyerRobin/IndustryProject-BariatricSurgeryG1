@@ -169,11 +169,15 @@ async def add_patient(
     for pc in procedure_category_columns:
         data_dict.pop(pc, None)
 
+    raw_score = 100 - (0.5 * data_dict['age'] + 1.2 * risk_pred)
+    patient_score = max(0, min(100, round(raw_score, 1)))  # Clamp between 0 and 100
+
     new_patient = Patient(
         fk_idDoctorInfo=doctor_id,
         bmi=bmi,
         risk_pred=risk_pred,
         weight_loss_pred=weight_loss_pred,
+        patient_score=patient_score,
         **data_dict
     )
 
@@ -385,6 +389,9 @@ def update_patient(
     for pc in procedure_category_columns:
         data_dict.pop(pc, None)
 
+    raw_score = 100 - (0.5 * data_dict['age'] + 1.2 * risk_pred)
+    patient_score = max(0, min(100, round(raw_score, 1)))  # Clamp between 0 and 100
+
     # Update all patient fields
     for key, value in data_dict.items():
         setattr(patient, key, value)
@@ -392,6 +399,7 @@ def update_patient(
     patient.bmi = bmi
     patient.risk_pred = risk_pred
     patient.weight_loss_pred = weight_loss_pred
+    patient.patient_score = patient_score
     if patient.patient_notes is None:
         patient.patient_notes = ""
 

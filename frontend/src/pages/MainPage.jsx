@@ -27,6 +27,8 @@ const MainPage = () => {
     if (sortBy === "name_desc") return b.name.localeCompare(a.name);
     if (sortBy === "age_asc") return a.age - b.age;
     if (sortBy === "age_desc") return b.age - a.age;
+    if (sortBy === "score_desc") return b.patient_score - a.patient_score;
+    if (sortBy === "score_asc") return a.patient_score - b.patient_score;
     return 0;
   });
 
@@ -126,6 +128,8 @@ const MainPage = () => {
             <option value="name_desc">Sort by Name (Z-A)</option>
             <option value="age_asc">Sort by Age (Youngest)</option>
             <option value="age_desc">Sort by Age (Oldest)</option>
+            <option value="score_desc">Sort by Score (Highest)</option>
+            <option value="score_asc">Sort by Score (Lowest)</option>
           </select>
           <Button bg="#2e65df" color="white" _hover={{ bg: "#ac3df3" }} type="submit" onClick={() => navigate('/AddPatient')}>
             Add New Patient
@@ -149,11 +153,11 @@ const MainPage = () => {
               }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <strong>{patient.name}</strong>
+                    <strong>{patient.name} ({patient.age} years old)</strong>
                     {patient.gender === 'male' && <FaMars color="#3182CE" />}
                     {patient.gender === 'female' && <FaVenus color="#D53F8C" />}
                   </div>
-                  <div>Age: {patient.age}</div>
+                  <div>Score: {patient.patient_score}</div>
                 </div>
                 <button
                   onClick={() => navigate(`/patient/${patient.idPatientInfo}`)}

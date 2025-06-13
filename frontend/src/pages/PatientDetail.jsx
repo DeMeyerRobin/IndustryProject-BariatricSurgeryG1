@@ -153,7 +153,7 @@ const PatientDetail = () => {
                 </Text>
                 {patient.weight_loss_pred !== undefined && patient.weight_loss_pred !== null && patient.weight_loss_pred !== "" && (
                 <Box mt={8}>
-                  <Text mb={2}><strong>Expected Weight Loss After Surgery:</strong> {patient.weight_loss_pred}%</Text>
+                  <Text mb={2}><strong>Expected Weight Loss 12 months After Surgery:</strong> {patient.weight_loss_pred}%</Text>
                   <Box w="100%" h="20px" bg="gray.200" borderRadius="md" overflow="hidden">
                     <Box
                       h="100%"
