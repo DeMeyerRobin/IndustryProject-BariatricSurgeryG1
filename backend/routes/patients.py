@@ -234,7 +234,8 @@ async def get_patient(
     # Ensure correct order
     patient_df = pd.DataFrame([[patient_input[feat] for feat in model_feature_order]], columns=model_feature_order)
 
-    saved_shap_plot_path = routes.SHAPExplainer.save_shap_plot_positive_only(pipeline=model, input_vector=patient_df.iloc[0], patient_id=patient.idPatientInfo)
+    saved_shap_positive_plot_path, feature_impact_positive = routes.SHAPExplainer.save_shap_plot_positive_only(pipeline=model, input_vector=patient_df.iloc[0], patient_id=patient.idPatientInfo)
+    saved_shap_negative_plot_path, feature_impact_negative = routes.SHAPExplainer.save_shap_plot_negative_only(pipeline=model, input_vector=patient_df.iloc[0], patient_id=patient.idPatientInfo)
 
     final = {
         "id": patient.idPatientInfo,
@@ -260,7 +261,10 @@ async def get_patient(
         "CM_CHOLSTRL": patient.CM_CHOLSTRL,
         "CM_OSTARTH": patient.CM_OSTARTH,
         "CM_HPLD": patient.CM_HPLD,
-        "saved_shap_plot_path": saved_shap_plot_path
+        "saved_shap_positive_plot_path": saved_shap_positive_plot_path,
+        "feature_impact_positive": feature_impact_positive,
+        "saved_shap_negative_plot_path": saved_shap_negative_plot_path,
+        "feature_impact_negative": feature_impact_negative
     }
 
     return final
