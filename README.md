@@ -89,7 +89,7 @@ python3 database_migration.py
 
 To start the backend, run:
 
-(if the terminal is not already in backend folder)
+(in a fresh terminal)
 ```bash
 cd backend/
 ```
