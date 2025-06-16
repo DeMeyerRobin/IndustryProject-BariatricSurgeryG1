@@ -18,27 +18,33 @@ The goal is to develop an AI-driven system that analyzes patient data (such as d
 
 ```
 IndustryProject-BariatricSurgeryG1/
-├── ai_model/                 # Python scripts related to data cleaning, feature selection, model training and SHAP explainability
-│   ├── shap_background.csv   # Background data used for SHAP explainability
-│   └── model_pipeline.pkl    # Trained model pipeline
+├── AI-Models/                         # Jupyter Notebooks for building AI models
+│   ├── BIASmodel_making_1.ipynb
+│   ├── Risk_Pred_Model.ipynb
+│   ├── ROB_minor_major.ipynb
+│   └── weight_loss.ipynb
 │
-├── backend/                  # FastAPI backend serving model predictions
-│   ├── main.py               # Main FastAPI server
-│   ├── endpoints/            # Endpoint definitions
-│   └── db/                   # SQLite or SQLAlchemy ORM models
+├── backend/                          # FastAPI backend and database setup
+│   ├── db/
+│   │   ├── database.py              # SQLAlchemy engine and Base
+│   │   └── models.py                # SQLAlchemy models
+│   ├── routes/                      # FastAPI route definitions
+│   ├── schemas/                     # Pydantic schemas
+│   ├── main.py                      # Main FastAPI application
+│   ├── backend_requirements.txt     # Python dependencies for backend
+│   ├── database_migration.py        # Script for table creation
+│   ├── database_requirements.txt    # Database requirements for database_venv
+│   ├── docker-compose.yml           # Docker setup for database
+│   ├── minor_major_model.pkl        # Minor_major classifier model
+│   ├── shap_background.csv          # Background SHAP data, needed for SHAP graph generation
+│   ├── SMOTE_logReg_risk_model.pkl  # Risk prediction model
+│   └── weight_loss_pipeline.pkl     # Model for predicting weight loss
 │
-├── frontend/                 # React.js frontend for user interaction
-│   ├── src/                  # Source code for components and pages
-│   └── public/               # Public assets like logos or index.html
-│
-├── data/                     # Datasets used in the project (anonymized patient data)
-│
-├── shap_plots/               # Saved SHAP waterfall plots for individual patient predictions
-│
-├── .gitignore
-├── Dockerfile
-├── docker-compose.yml
-└── README.md                 # Project documentation (this file)
+├── frontend/                        # React.js frontend interface
+│   ├── public/                     # Static assets (index.html, etc.)
+│   ├── src/                        # React component source code
+│   ├── package.json                # NPM package config
+│   └── package-lock.json           # NPM lock file
 ```
 
 ## 🔧 Technologies Used

@@ -55,7 +55,7 @@ def get_db():
 
 model = load("SMOTE_logReg_risk_model.pkl")
 weight_loss_model = load("weight_loss_pipeline.pkl")
-minor_major_model = load("model_type.pkl")
+minor_major_model = load("minor_major_model.pkl")
 
 @router.post("/add_patient")
 async def add_patient(
