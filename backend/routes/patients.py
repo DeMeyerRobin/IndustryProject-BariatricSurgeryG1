@@ -268,7 +268,8 @@ async def get_patient(
         "saved_shap_positive_plot_path": saved_shap_positive_plot_path,
         "feature_impact_positive": feature_impact_positive,
         "saved_shap_negative_plot_path": saved_shap_negative_plot_path,
-        "feature_impact_negative": feature_impact_negative
+        "feature_impact_negative": feature_impact_negative,
+        "patient_score": patient.patient_score
     }
 
     return final
