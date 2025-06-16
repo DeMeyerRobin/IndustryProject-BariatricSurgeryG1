@@ -105,6 +105,7 @@ And at last:
 
 To start the frontend, run:
 
+(in a fresh terminal)
 ```bash
 cd frontend/
 npm install
