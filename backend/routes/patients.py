@@ -55,6 +55,7 @@ def get_db():
 
 model = load("SMOTE_logReg_risk_model.pkl")
 weight_loss_model = load("weight_loss_pipeline.pkl")
+minor_major_model = load("model_type.pkl")
 
 @router.post("/add_patient")
 async def add_patient(
@@ -143,7 +144,7 @@ async def add_patient(
         y_proba = model.predict_proba(model_input)[0, 1]
         risk_pred = round(float(y_proba) * 100, 2)  # scale to percentage
 
-        # NEW: Predict weight loss percentage using Lasso regression
+        # Predict weight loss percentage using Lasso regression
         weight_loss_features = [
             "age", "bmi", "family_hist_cnt", "chronic_meds_cnt",
             "CM_DM", "CM_DMCX", "CM_HTN_C",
@@ -156,6 +157,29 @@ async def add_patient(
         weight_loss_model_input = model_input_df[weight_loss_features]
         weight_loss_pred = float(weight_loss_model.predict(weight_loss_model_input)[0])
         weight_loss_pred = round(weight_loss_pred, 2)
+
+        # PREDICT MINOR MAJOR CLASSIFICATION
+        minor_major_features = [
+            'age', 'height', 'weight', 'bmi', 'family_hist_cnt', 'chronic_meds_cnt',
+            'CM_DM', 'CM_DMCX', 'CM_HTN_C', 'CM_LIVER', 'CM_OBESE', 'CM_APNEA',
+            'CM_CHOLSTRL', 'CM_OSTARTH', 'CM_HPLD', 'gender_Male',
+            'procedure_category_BPD -DS',
+            'procedure_category_Mini gastric bypass (OAGB)',
+            'procedure_category_RYGBP', 'procedure_category_SADI',
+            'procedure_category_Sleeve', 'antibiotics_Augmentin',
+            'antibiotics_Clindamycin', 'antibiotics_Invanz', 'antibiotics_Kefsol',
+            'antibiotics_Rocephin'
+       ]
+        minor_major_input_data = {}
+        for col in minor_major_features:
+            minor_major_input_data[col] = model_input_df.at[0, col] if col in model_input_df.columns else 0.0
+
+        minor_major_input_df = pd.DataFrame([minor_major_input_data])
+        temp_copy = data_dict.copy()
+        minor_major_input_df['height'] = temp_copy['height']
+        minor_major_input_df['weight'] = temp_copy['weight']
+        minor_major_risk = minor_major_model.predict_proba(minor_major_input_df)[0, 1]
+        minor_major_risk = round(minor_major_risk * 100, 2)
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
@@ -178,6 +202,7 @@ async def add_patient(
         risk_pred=risk_pred,
         weight_loss_pred=weight_loss_pred,
         patient_score=patient_score,
+        minor_major_pred=minor_major_risk,
         **data_dict
     )
 
@@ -255,6 +280,7 @@ async def get_patient(
         "antibiotics": patient.antibiotics,
         "risk_pred": patient.risk_pred,
         "weight_loss_pred": patient.weight_loss_pred,
+        "minor_major_pred": patient.minor_major_pred,
         "patient_notes": patient.patient_notes,
         "CM_DM": patient.CM_DM,
         "CM_DMCX": patient.CM_DMCX,
@@ -353,10 +379,10 @@ def update_patient(
                     print(f"[DEBUG] Field '{field}' failed to convert: '{val}' — setting to 0.0")
                     model_input[field] = 0.0
 
-        print("\n[DEBUG] Final model_input values before DataFrame creation:")
-        for key in model_feature_order:
-            val = model_input.get(key, None)
-            print(f"  {key}: '{val}'")
+        # print("\n[DEBUG] Final model_input values before DataFrame creation:")
+        # for key in model_feature_order:
+        #     val = model_input.get(key, None)
+        #     print(f"  {key}: '{val}'")
 
         # Create DataFrame and predict
         model_input_df = pd.DataFrame([[model_input[col] for col in model_feature_order]], columns=model_feature_order)
@@ -376,6 +402,29 @@ def update_patient(
         weight_loss_model_input = model_input_df[weight_loss_features]
         weight_loss_pred = float(weight_loss_model.predict(weight_loss_model_input)[0])
         weight_loss_pred = round(weight_loss_pred, 2)
+
+        # PREDICT MINOR MAJOR CLASSIFICATION
+        minor_major_features = [
+            'age', 'height', 'weight', 'bmi', 'family_hist_cnt', 'chronic_meds_cnt',
+            'CM_DM', 'CM_DMCX', 'CM_HTN_C', 'CM_LIVER', 'CM_OBESE', 'CM_APNEA',
+            'CM_CHOLSTRL', 'CM_OSTARTH', 'CM_HPLD', 'gender_Male',
+            'procedure_category_BPD -DS',
+            'procedure_category_Mini gastric bypass (OAGB)',
+            'procedure_category_RYGBP', 'procedure_category_SADI',
+            'procedure_category_Sleeve', 'antibiotics_Augmentin',
+            'antibiotics_Clindamycin', 'antibiotics_Invanz', 'antibiotics_Kefsol',
+            'antibiotics_Rocephin'
+       ]
+        minor_major_input_data = {}
+        for col in minor_major_features:
+            minor_major_input_data[col] = model_input_df.at[0, col] if col in model_input_df.columns else 0.0
+
+        minor_major_input_df = pd.DataFrame([minor_major_input_data])
+        temp_copy = data_dict.copy()
+        minor_major_input_df['height'] = temp_copy['height']
+        minor_major_input_df['weight'] = temp_copy['weight']
+        minor_major_risk = minor_major_model.predict_proba(minor_major_input_df)[0, 1]
+        minor_major_risk = round(minor_major_risk * 100, 2)
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
@@ -400,6 +449,7 @@ def update_patient(
     patient.risk_pred = risk_pred
     patient.weight_loss_pred = weight_loss_pred
     patient.patient_score = patient_score
+    patient.minor_major_pred = minor_major_risk
     if patient.patient_notes is None:
         patient.patient_notes = ""
 

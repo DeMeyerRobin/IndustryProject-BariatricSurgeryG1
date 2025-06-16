@@ -9,6 +9,25 @@ const AIExplanation = () => {
   const [patient, setPatient] = useState(null);
   const [error, setError] = useState('');
 
+  const getMinorMajorExplanation = (value) => {
+    if (value === null || value === undefined) return null;
+  
+    const percent = value;
+    if (percent > 50) {
+      return {
+        label: "Major complication",
+        confidence: percent.toFixed(2),
+      };
+    } else {
+      return {
+        label: "Minor complication",
+        confidence: (100 - percent).toFixed(2),
+      };
+    }
+  };
+  
+  const minorMajor = getMinorMajorExplanation(patient?.minor_major_pred);
+
   useEffect(() => {
     fetch('http://localhost:8000/check-session', { credentials: 'include' })
       .then(res => res.json())
@@ -48,6 +67,20 @@ const AIExplanation = () => {
         <Flex mt={6} direction="column" align="center">
         <Heading mb={4}>AI Explainability for {patient.name}</Heading>
         </Flex>
+
+        {minorMajor && (
+          <Box bg="blue.50" border="1px solid #bee3f8" p={4} rounded="md" mb={6} textAlign="center">
+            <Text fontSize="lg" fontWeight="bold" color="blue.800">
+              Predicted: {minorMajor.label}
+            </Text>
+            <Text fontSize="sm" color="blue.700">
+              Confidence: {minorMajor.confidence}%
+            </Text>
+            <Text fontSize="xs" color="gray.600" mt={2}>
+              This prediction estimates whether the complication—if one occurs—would likely be minor or major.
+            </Text>
+          </Box>
+        )}
 
 
         {patient.saved_shap_positive_plot_path && (

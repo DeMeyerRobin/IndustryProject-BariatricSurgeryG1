@@ -27,6 +27,7 @@ class Patient(Base):
     antibiotics = Column("Antibiotics", String)
     risk_pred = Column("ModelRiskPred", Float)
     weight_loss_pred = Column("WeightLossPred", Float)
+    minor_major_pred = Column("MinorMajorPred", Float)
     patient_score = Column("PatientScore", Float)
     patient_notes = Column("PatientNotes", String)
     CM_DM = Column("CM_DM", Integer)
