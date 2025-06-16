@@ -51,7 +51,7 @@ IndustryProject-BariatricSurgeryG1/
 
 - **Python** for AI modeling and FastAPI backend
 - **React.js** with Chakra UI for the frontend
-- **SQLite / SQLAlchemy** for local database integration
+- **SQLAlchemy** for local database integration
 - **SHAP** for model interpretability
 - **Docker** and `docker-compose` for containerization
 
