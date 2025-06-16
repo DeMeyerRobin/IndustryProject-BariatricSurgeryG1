@@ -1,7 +1,7 @@
 // src/pages/PatientDetail.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Heading, Text, Spinner, Button } from '@chakra-ui/react';
+import { Box, Heading, Text, Spinner, Button, Flex } from '@chakra-ui/react';
 
 const cmOptions = [
   'CM_AIDS', 'CM_ANEMDEF', 'CM_ARTH', 'CM_CHF', 'CM_DEPRESS',
@@ -9,6 +9,23 @@ const cmOptions = [
   'CM_OBESE', 'CM_PSYCH', 'CM_SMOKE', 'CM_APNEA', 'CM_CHOLSTRL',
   'CM_OSTARTH', 'CM_HPLD'
 ];
+
+function parseTopShapFeatures(rawString, topN = 3) {
+  const regex = /([a-zA-Z0-9_\-\s]+?)(-?\d+\.\d+)/g;
+  let match;
+  const features = [];
+
+  while ((match = regex.exec(rawString)) !== null) {
+    features.push({
+      name: match[1].trim(),
+      value: parseFloat(match[2])
+    });
+  }
+
+  return features
+    .sort((a, b) => b.value - a.value)
+    .slice(0, topN);
+}
 
 const PatientDetail = () => {
   const { id } = useParams();
@@ -97,7 +114,17 @@ const PatientDetail = () => {
 
           {(patient.bmi >= 25 || patient.risk_pred > 10) && patient.age > 0 && patient.height > 0 && patient.weight > 0 ? (
             <>
-              <Text mb={2}><strong>AI Risk Prediction For Bariatric Surgery:</strong> {patient.risk_pred}%</Text>
+              <Text mb={2}><strong>AI Risk Prediction For Bariatric Surgery:</strong> {patient.risk_pred}%  | 
+              <Text
+                as="span"
+                color="blue.500"
+                textDecoration="underline"
+                cursor="pointer"
+                onClick={() => navigate(`/explanation/${patient.id}`)}
+              >
+                Explain
+                </Text>
+                </Text>
               <Box w="100%" h="20px" bg="gray.200" borderRadius="md" overflow="hidden">
                 <Box
                   h="100%"
@@ -116,11 +143,12 @@ const PatientDetail = () => {
               <Text mt={2} fontSize="sm" color="gray.600">
                 {
                   patient.risk_pred < 10
-                    ? 'Mild Risk – Likely a good candidate for surgery.'
+                    ? 'Mild Risk - Likely a good candidate for surgery.'
                     : patient.risk_pred < 40
-                    ? 'Moderate Risk – Caution advised; additional assessment recommended.'
-                    : 'High Risk – Bariatric surgery may not be advisable without further evaluation.'
+                    ? 'Moderate Risk - Caution advised; additional assessment recommended.'
+                    : 'High Risk - Bariatric surgery may not be advisable without further evaluation.'
                 }
+                {" "}
               </Text>
               <Text mt={3} fontSize="sm" color="gray.500">
                 This AI model is approximately 70% accurate.{" "}
@@ -136,7 +164,7 @@ const PatientDetail = () => {
                 </Text>
                 {patient.weight_loss_pred !== undefined && patient.weight_loss_pred !== null && patient.weight_loss_pred !== "" && (
                 <Box mt={8}>
-                  <Text mb={2}><strong>Expected Weight Loss After Surgery:</strong> {patient.weight_loss_pred}%</Text>
+                  <Text mb={2}><strong>Expected Weight Loss 12 months After Surgery:</strong> {patient.weight_loss_pred}%</Text>
                   <Box w="100%" h="20px" bg="gray.200" borderRadius="md" overflow="hidden">
                     <Box
                       h="100%"
