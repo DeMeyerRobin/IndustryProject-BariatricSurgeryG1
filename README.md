@@ -92,9 +92,6 @@ To start the backend, run:
 (in a fresh terminal)
 ```bash
 cd backend/
-```
-then:
-```bash
 python3 -m venv backend_venv
 source ./backend_venv/bin/activate
 pip install -r backend_requirements.txt
