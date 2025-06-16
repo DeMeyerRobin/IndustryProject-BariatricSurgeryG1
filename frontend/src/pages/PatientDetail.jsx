@@ -78,6 +78,18 @@ const PatientDetail = () => {
       <Box bg="white" p={6} rounded="md" shadow="md" maxW="xl" mx="auto">
         <Heading mb={6}>Patient Details</Heading>
 
+        <Box bg="blue.50" border="1px solid #bee3f8" p={4} rounded="md" mb={6} textAlign="center"><Text><strong>Patient Sore:</strong> {patient.patient_score} | 
+          <Text
+            as="span"
+            color="blue.500"
+            textDecoration="underline"
+            cursor="pointer"
+            onClick={() => navigate(`/scoreexplanation/${patient.id}`)}
+          >
+            Explain
+          </Text>
+          </Text>
+        </Box>
         <Box mb={3}><Text><strong>Name:</strong> {patient.name}</Text></Box>
         <Box mb={3}><Text><strong>Age:</strong> {patient.age}</Text></Box>
         <Box mb={3}><Text><strong>Gender:</strong> {patient.gender}</Text></Box>
@@ -102,18 +114,6 @@ const PatientDetail = () => {
         ))}
       </Box>
         <Box mb={10}><Text><strong>Patient Notes:</strong> {patient.patient_notes}</Text></Box>
-        <Box mb={2}><Text><strong>Patient Sore:</strong> {patient.patient_score} | 
-          <Text
-            as="span"
-            color="blue.500"
-            textDecoration="underline"
-            cursor="pointer"
-            onClick={() => navigate(`/scoreexplanation/${patient.id}`)}
-          >
-            Explain
-          </Text>
-          </Text>
-        </Box>
         <Box mb={6}>
           <Text mb={2}><strong>BMI Class:</strong> {
             patient.bmi < 18.5 ? 'Underweight' :
