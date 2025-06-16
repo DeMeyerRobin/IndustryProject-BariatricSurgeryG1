@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36" version="26.0.8">
   <diagram name="Page-1" id="Ujbwj95MNwFOvTW-vX64">
-    <mxGraphModel dx="2565" dy="2588" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2931" dy="2791" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -246,6 +246,9 @@
         </mxCell>
         <mxCell id="ppyI8dV4X2BFpjyLbfqM-68" value="PatientId" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
           <mxGeometry x="1010" y="285" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ppyI8dV4X2BFpjyLbfqM-69" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Docker_logo.png/640px-Docker_logo.png;" vertex="1" parent="1">
+          <mxGeometry x="560" y="-790" width="355.56" height="90" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
