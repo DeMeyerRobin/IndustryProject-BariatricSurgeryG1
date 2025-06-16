@@ -10,6 +10,23 @@ const cmOptions = [
   'CM_OSTARTH', 'CM_HPLD'
 ];
 
+function parseTopShapFeatures(rawString, topN = 3) {
+  const regex = /([a-zA-Z0-9_\-\s]+?)(-?\d+\.\d+)/g;
+  let match;
+  const features = [];
+
+  while ((match = regex.exec(rawString)) !== null) {
+    features.push({
+      name: match[1].trim(),
+      value: parseFloat(match[2])
+    });
+  }
+
+  return features
+    .sort((a, b) => b.value - a.value)
+    .slice(0, topN);
+}
+
 const PatientDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -97,7 +114,17 @@ const PatientDetail = () => {
 
           {(patient.bmi >= 25 || patient.risk_pred > 10) && patient.age > 0 && patient.height > 0 && patient.weight > 0 ? (
             <>
-              <Text mb={2}><strong>AI Risk Prediction For Bariatric Surgery:</strong> {patient.risk_pred}%</Text>
+              <Text mb={2}><strong>AI Risk Prediction For Bariatric Surgery:</strong> {patient.risk_pred}%  | 
+              <Text
+                as="span"
+                color="blue.500"
+                textDecoration="underline"
+                cursor="pointer"
+                onClick={() => navigate(`/explanation/${patient.id}`)}
+              >
+                Explain
+                </Text>
+                </Text>
               <Box w="100%" h="20px" bg="gray.200" borderRadius="md" overflow="hidden">
                 <Box
                   h="100%"
@@ -116,11 +143,12 @@ const PatientDetail = () => {
               <Text mt={2} fontSize="sm" color="gray.600">
                 {
                   patient.risk_pred < 10
-                    ? 'Mild Risk – Likely a good candidate for surgery.'
+                    ? 'Mild Risk - Likely a good candidate for surgery.'
                     : patient.risk_pred < 40
-                    ? 'Moderate Risk – Caution advised; additional assessment recommended.'
-                    : 'High Risk – Bariatric surgery may not be advisable without further evaluation.'
+                    ? 'Moderate Risk - Caution advised; additional assessment recommended.'
+                    : 'High Risk - Bariatric surgery may not be advisable without further evaluation.'
                 }
+                {" "}
               </Text>
               <Text mt={3} fontSize="sm" color="gray.500">
                 This AI model is approximately 70% accurate.{" "}
@@ -136,7 +164,7 @@ const PatientDetail = () => {
                 </Text>
                 {patient.weight_loss_pred !== undefined && patient.weight_loss_pred !== null && patient.weight_loss_pred !== "" && (
                 <Box mt={8}>
-                  <Text mb={2}><strong>Expected Weight Loss After Surgery:</strong> {patient.weight_loss_pred}%</Text>
+                  <Text mb={2}><strong>Expected Weight Loss 12 months After Surgery:</strong> {patient.weight_loss_pred}%</Text>
                   <Box w="100%" h="20px" bg="gray.200" borderRadius="md" overflow="hidden">
                     <Box
                       h="100%"
@@ -225,21 +253,6 @@ const PatientDetail = () => {
           </Button>
         </Box>
       </Box>
-      {patient.saved_shap_plot_path && (
-      <Flex mt={10} direction="column" align="center" justify="center">
-        <Heading size="md" mb={3}>AI Explainability (SHAP)</Heading>
-        <img
-          src={`http://localhost:8000/${patient.saved_shap_plot_path}`}
-          alt="SHAP Explanation"
-          style={{
-            maxWidth: '100%',
-            maxHeight: '600px',
-            borderRadius: '8px',
-            border: '1px solid #ccc'
-          }}
-        />
-      </Flex>
-    )}
     </Box>
   );
 };

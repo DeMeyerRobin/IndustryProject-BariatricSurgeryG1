@@ -169,11 +169,15 @@ async def add_patient(
     for pc in procedure_category_columns:
         data_dict.pop(pc, None)
 
+    raw_score = 100 - (0.5 * data_dict['age'] + 1.2 * risk_pred)
+    patient_score = max(0, min(100, round(raw_score, 1)))  # Clamp between 0 and 100
+
     new_patient = Patient(
         fk_idDoctorInfo=doctor_id,
         bmi=bmi,
         risk_pred=risk_pred,
         weight_loss_pred=weight_loss_pred,
+        patient_score=patient_score,
         **data_dict
     )
 
@@ -234,7 +238,8 @@ async def get_patient(
     # Ensure correct order
     patient_df = pd.DataFrame([[patient_input[feat] for feat in model_feature_order]], columns=model_feature_order)
 
-    saved_shap_plot_path = routes.SHAPExplainer.save_shap_plot(pipeline=model, input_vector=patient_df.iloc[0], patient_id=patient.idPatientInfo)
+    saved_shap_positive_plot_path, feature_impact_positive = routes.SHAPExplainer.save_shap_plot_positive_only(pipeline=model, input_vector=patient_df.iloc[0], patient_id=patient.idPatientInfo)
+    saved_shap_negative_plot_path, feature_impact_negative = routes.SHAPExplainer.save_shap_plot_negative_only(pipeline=model, input_vector=patient_df.iloc[0], patient_id=patient.idPatientInfo)
 
     final = {
         "id": patient.idPatientInfo,
@@ -260,7 +265,10 @@ async def get_patient(
         "CM_CHOLSTRL": patient.CM_CHOLSTRL,
         "CM_OSTARTH": patient.CM_OSTARTH,
         "CM_HPLD": patient.CM_HPLD,
-        "saved_shap_plot_path": saved_shap_plot_path
+        "saved_shap_positive_plot_path": saved_shap_positive_plot_path,
+        "feature_impact_positive": feature_impact_positive,
+        "saved_shap_negative_plot_path": saved_shap_negative_plot_path,
+        "feature_impact_negative": feature_impact_negative
     }
 
     return final
@@ -355,7 +363,6 @@ def update_patient(
         risk_pred = round(float(y_proba) * 100, 2)
 
         # NEW: Predict weight loss percentage using Lasso regression
-        print("WE MADE IT THIS FAR")
         weight_loss_features = [
             "age", "bmi", "family_hist_cnt", "chronic_meds_cnt",
             "CM_DM", "CM_DMCX", "CM_HTN_C",
@@ -381,6 +388,9 @@ def update_patient(
     for pc in procedure_category_columns:
         data_dict.pop(pc, None)
 
+    raw_score = 100 - (0.5 * data_dict['age'] + 1.2 * risk_pred)
+    patient_score = max(0, min(100, round(raw_score, 1)))  # Clamp between 0 and 100
+
     # Update all patient fields
     for key, value in data_dict.items():
         setattr(patient, key, value)
@@ -388,6 +398,7 @@ def update_patient(
     patient.bmi = bmi
     patient.risk_pred = risk_pred
     patient.weight_loss_pred = weight_loss_pred
+    patient.patient_score = patient_score
     if patient.patient_notes is None:
         patient.patient_notes = ""
 
