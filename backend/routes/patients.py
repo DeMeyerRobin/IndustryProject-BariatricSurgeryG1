@@ -363,7 +363,6 @@ def update_patient(
         risk_pred = round(float(y_proba) * 100, 2)
 
         # NEW: Predict weight loss percentage using Lasso regression
-        print("WE MADE IT THIS FAR")
         weight_loss_features = [
             "age", "bmi", "family_hist_cnt", "chronic_meds_cnt",
             "CM_DM", "CM_DMCX", "CM_HTN_C",
