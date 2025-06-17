@@ -96,7 +96,7 @@ const PatientDetail = () => {
         <Box mb={3}><Text><strong>Height:</strong> {patient.height} cm</Text></Box>
         <Box mb={3}><Text><strong>Weight:</strong> {patient.weight} kg</Text></Box>
         <Box mb={3}><Text><strong>Bmi:</strong> {patient.bmi}</Text></Box>
-        <Box mb={3}><Text><strong>Family Surgery Count:</strong> {patient.family_hist_cnt}</Text></Box>
+        <Box mb={3}><Text><strong>Previous Family Surgery Count:</strong> {patient.family_hist_cnt}</Text></Box>
         <Box mb={3}><Text><strong>Chronic Meds Count:</strong> {patient.chronic_meds_cnt}</Text></Box>
         <Box mb={3}><Text><strong>Procedure Category:</strong> {patient.procedure_category}</Text></Box>
         <Box mb={3}><Text><strong>Antibiotics:</strong> {patient.antibiotics}</Text></Box>

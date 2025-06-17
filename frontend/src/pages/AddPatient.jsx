@@ -188,7 +188,7 @@ const AddPatient = () => {
           { label: "How old is the patient?", value: age, setter: setAge, type: "number" },
           { label: "Patient's height (cm)?", value: height, setter: setHeight, type: "number" },
           { label: "Patient's weight (kg)?", value: weight, setter: setWeight, type: "number" },
-          { label: "Previous number of family surgeries?", value: familySurgeryCnt, setter: setFamilySurgeryCount, type: "number" },
+          { label: "How many relatives have had bariatric surgery?", value: familySurgeryCnt, setter: setFamilySurgeryCount, type: "number" },
           { label: "Number of chronic medications?", value: chronicMedsCnt, setter: setChronicMedsCnt, type: "number" }
         ].map(({ label, value, setter, type }, idx) => (
           <div key={idx} style={fieldStyle}>

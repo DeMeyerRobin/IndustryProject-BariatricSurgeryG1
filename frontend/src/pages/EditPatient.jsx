@@ -138,7 +138,7 @@ const EditPatient = () => {
           { label: 'Age', field: 'age', type: 'number' },
           { label: 'Height (cm)', field: 'height', type: 'number' },
           { label: 'Weight (kg)', field: 'weight', type: 'number' },
-          { label: 'Family Surgery Count', field: 'family_hist_cnt', type: 'number' },
+          { label: 'How many relatives have had bariatric surgery?  ', field: 'family_hist_cnt', type: 'number' },
           { label: 'Chronic Meds Count', field: 'chronic_meds_cnt', type: 'number' }
         ].map(({ label, field, type = 'text' }) => (
           <div key={field} style={fieldStyle}>
