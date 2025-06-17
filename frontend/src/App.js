@@ -11,6 +11,7 @@ import AIInfoRiskModel from './pages/AIInfoRiskModel';
 import AIInfoWeightLossModel from './pages/AIInfoWeightLossModel';
 import AIExplanation from './pages/AIExplanation';
 import PatientScoreExplanation from './pages/PatientScoreExplanation';
+import AIInfoMinorMajor from './pages/AIInfoMinorMajor';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/AI-info/weight-loss-model" element={<AIInfoWeightLossModel />} />
         <Route path="/explanation/:patient_id" element={<AIExplanation />} />
         <Route path="/scoreexplanation/:patientId" element={<PatientScoreExplanation />} />
+        <Route path="/AI-info/minor-major-model" element={<AIInfoMinorMajor />} />
       </Routes>
     </Router>
   );

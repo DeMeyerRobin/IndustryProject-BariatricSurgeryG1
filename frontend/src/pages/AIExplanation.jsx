@@ -77,7 +77,16 @@ const AIExplanation = () => {
               Confidence: {minorMajor.confidence}%
             </Text>
             <Text fontSize="xs" color="gray.600" mt={2}>
-              This prediction estimates whether the complication—if one occurs—would likely be minor or major.
+              This prediction estimates whether the complication—if one occurs—would likely be minor or major.{" "}
+              <Text
+                as="span"
+                color="blue.500"
+                textDecoration="underline"
+                cursor="pointer"
+                onClick={() => navigate('/AI-info/minor-major-model')}
+              >
+                Learn more
+                </Text>
             </Text>
           </Box>
         )}
