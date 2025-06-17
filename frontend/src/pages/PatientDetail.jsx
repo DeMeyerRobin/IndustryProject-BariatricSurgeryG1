@@ -124,7 +124,7 @@ const PatientDetail = () => {
             'Obesity Class III'
           }</Text>
 
-          {(patient.bmi >= 25 || patient.risk_pred > 10) && patient.age > 0 && patient.height > 0 && patient.weight > 0 ? (
+          {(patient.bmi >= 25) && patient.age > 0 && patient.height > 0 && patient.weight > 0 ? (
             <>
               <Text mb={2}><strong>AI Risk Prediction For Bariatric Surgery:</strong> {patient.risk_pred}%  | 
               <Text
