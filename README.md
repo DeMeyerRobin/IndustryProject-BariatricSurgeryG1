@@ -103,7 +103,9 @@ And at last:
 ---
 🔷 The Frontend
 
-To start the frontend, run:
+Be sure to first install [node.js](https://nodejs.org/)
+
+Then to start the frontend, run:
 
 (in a fresh terminal)
 ```bash
