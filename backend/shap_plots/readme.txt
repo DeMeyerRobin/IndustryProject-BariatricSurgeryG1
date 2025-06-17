@@ -1,0 +1,1 @@
+In this folder, all automatically generated shap_plots for patients will be stored for the frontend to access.

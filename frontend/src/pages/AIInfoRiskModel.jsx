@@ -31,20 +31,20 @@ const AIInfoRiskModel = () => {
         <Heading mb={6}>About the AI Risk Prediction Model</Heading>
 
         <Box mb={5}>
-            <Heading size="md" mb={2}>Model Overview</Heading>
-            <Text>
-                This AI model is trained to predict the risk of post-operative complications for patients undergoing bariatric surgery.
-                It was developed using a dataset of anonymized patient records and trained using a gradient boosting algorithm (
-                <a
-                href="https://xgboost.readthedocs.io/en/stable/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textDecoration: 'underline', color: '#3182ce' }} // Chakra UI blue.500
-                >
-                XGBoost
-                </a>
-                ), which is known for high performance with tabular medical data.
-            </Text>
+          <Heading size="md" mb={2}>Model Overview</Heading>
+          <Text>
+            This AI model is trained to predict the risk of post-operative complications for patients undergoing bariatric surgery.
+            It was developed using a dataset of anonymized patient records and trained using a statistical classification algorithm (
+            <a
+              href="https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: 'underline', color: '#3182ce' }} // Chakra UI blue.500
+            >
+              logistic regression
+            </a>
+            ), which is widely used for binary classification problems in medical data.
+          </Text>
         </Box>
 
         <Box mb={5}>
@@ -58,7 +58,7 @@ const AIInfoRiskModel = () => {
         <Box mb={5}>
           <Heading size="md" mb={2}>Accuracy</Heading>
           <Text>
-            The model achieves an estimated accuracy of 70% on unseen data. This means it correctly predicts about 7 out of 10 patient cases. 
+            The model achieves an estimated accuracy of 80% on unseen data. This means it correctly predicts about 8 out of 10 patient cases. 
             However, it should not be used as a replacement for medical judgment — it is a decision-support tool.
           </Text>
         </Box>

@@ -163,7 +163,7 @@ const PatientDetail = () => {
                 {" "}
               </Text>
               <Text mt={3} fontSize="sm" color="gray.500">
-                This AI model is approximately 70% accurate.{" "}
+                This AI model is approximately 80% accurate.{" "}
                 <Text
                   as="span"
                   color="blue.500"
