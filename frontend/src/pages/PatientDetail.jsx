@@ -196,7 +196,7 @@ const PatientDetail = () => {
                     <strong>{(patient.weight - (patient.weight * (patient.weight_loss_pred / 100))).toFixed(1)} kg</strong>.
                   </Text>
                   <Text mt={3} fontSize="sm" color="gray.500">
-                    This model predicts weight loss with an average error of around 7%.{" "}
+                    This model predicts weight loss with an average error of around 6%.{" "}
                     <Text
                       as="span"
                       color="blue.500"

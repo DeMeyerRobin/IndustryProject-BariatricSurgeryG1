@@ -57,8 +57,8 @@ const AIInfoWeightLossModel = () => {
         <Box mb={5}>
           <Heading size="md" mb={2}>Accuracy</Heading>
           <Text>
-            The model achieves a mean absolute error (MAE) of approximately 7 percentage points on test data. This means that on average,
-            the predicted weight loss deviates by about 7% from the actual result. It should be viewed as a helpful estimate — not a guarantee.
+            The model achieves a mean absolute error (MAE) of approximately 6 percentage points on test data. This means that on average,
+            the predicted weight loss deviates by about 6% from the actual result. It should be viewed as a helpful estimate — not a guarantee.
           </Text>
         </Box>
 
